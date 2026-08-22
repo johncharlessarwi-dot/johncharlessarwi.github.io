@@ -1,23 +1,548 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>John Charles Sarwi</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>John Charles Sarwi | Full Stack Developer</title>
 
 <style>
-body{
-    font-family: Arial;
-    text-align:center;
-    margin-top:100px;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#050816;
+    color:white;
+    overflow-x:hidden;
+}
+
+
+/* animated background */
+
+body::before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:linear-gradient(45deg,#00eaff,#8b5cf6);
+    filter:blur(150px);
+    top:-100px;
+    left:-100px;
+    opacity:.35;
+    z-index:-1;
+}
+
+
+/* navbar */
+
+nav{
+    position:fixed;
+    width:100%;
+    top:0;
+    padding:20px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(5,8,22,.7);
+    backdrop-filter:blur(15px);
+    z-index:100;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:#00eaff;
+}
+
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:25px;
+}
+
+
+/* hero */
+
+
+.hero{
+
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:100px 20px;
+
+}
+
+
+.hero h1{
+
+    font-size:55px;
+    animation:slide 1.5s;
+
+}
+
+
+.hero span{
+    color:#00eaff;
+}
+
+
+.hero p{
+
+    margin:20px;
+    font-size:20px;
+    color:#bbb;
+
+}
+
+
+.btn{
+
+    display:inline-block;
+    padding:15px 30px;
+    margin:10px;
+    border-radius:30px;
+    background:linear-gradient(45deg,#00eaff,#8b5cf6);
+    color:white;
+    text-decoration:none;
+    transition:.4s;
+
+}
+
+
+.btn:hover{
+
+    transform:translateY(-8px);
+}
+
+
+/* sections */
+
+
+section{
+
+    padding:80px 8%;
+
+}
+
+
+.title{
+
+    text-align:center;
+    font-size:35px;
+    margin-bottom:40px;
+    color:#00eaff;
+
+}
+
+
+/* cards */
+
+
+.cards{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+
+}
+
+
+.card{
+
+background:rgba(255,255,255,.08);
+padding:30px;
+border-radius:20px;
+backdrop-filter:blur(15px);
+transition:.4s;
+
+}
+
+
+.card:hover{
+
+transform:translateY(-10px);
+box-shadow:0 0 30px #00eaff;
+
+}
+
+
+/* skills */
+
+
+.skill{
+
+margin:15px 0;
+
+}
+
+
+.bar{
+
+height:10px;
+background:#222;
+border-radius:20px;
+
+}
+
+
+.fill{
+
+height:100%;
+background:linear-gradient(90deg,#00eaff,#8b5cf6);
+border-radius:20px;
+
+}
+
+
+
+/* footer */
+
+
+footer{
+
+text-align:center;
+padding:30px;
+background:#02030a;
+
+}
+
+
+
+@keyframes slide{
+
+from{
+
+opacity:0;
+transform:translateY(50px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+}
+
+
 </style>
 
 </head>
 
+
 <body>
 
-<h1>John Charles Sarwi</h1>
 
-<p>Welcome to my website.</p>
+<nav>
+
+<div class="logo">
+John Sarwi
+</div>
+
+
+<div>
+
+<a href="#about">About</a>
+<a href="#skills">Skills</a>
+<a href="#apps">Apps</a>
+<a href="#contact">Contact</a>
+
+</div>
+
+</nav>
+
+
+
+<section class="hero">
+
+
+<div>
+
+
+<h1>
+Hello, I'm <span>John Charles Sarwi</span>
+</h1>
+
+
+<p>
+Full Stack Developer | AI Enthusiast | Digital Solutions Builder 🚀
+</p>
+
+
+<a class="btn" href="#apps">
+My Apps
+</a>
+
+
+<a class="btn" href="https://wa.me/255698170989">
+WhatsApp Me
+</a>
+
+
+</div>
+
+
+</section>
+
+
+
+
+<section id="about">
+
+
+<h2 class="title">
+About Me
+</h2>
+
+
+<p style="text-align:center;font-size:20px">
+
+I am a passionate software developer focused on creating modern web applications,
+AI-powered solutions and digital platforms that solve real-world problems.
+I transform ideas into powerful, simple and beautiful applications.
+
+</p>
+
+
+</section>
+
+
+
+
+
+<section id="skills">
+
+
+<h2 class="title">
+My Skills
+</h2>
+
+
+
+<div class="cards">
+
+
+<div class="card">
+
+<h3>Frontend Development</h3>
+
+<p>
+HTML5<br>
+CSS3<br>
+JavaScript<br>
+React<br>
+Modern UI Design
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Backend Development</h3>
+
+<p>
+Node.js<br>
+Express.js<br>
+APIs<br>
+Database Systems
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>AI & Technology</h3>
+
+<p>
+AI Integration<br>
+Automation<br>
+Generative AI Apps<br>
+Smart Systems
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Deployment</h3>
+
+<p>
+GitHub<br>
+Netlify<br>
+Vercel<br>
+Cloud Hosting
+</p>
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<section id="apps">
+
+
+<h2 class="title">
+My Apps & Projects
+</h2>
+
+
+<div class="cards">
+
+
+
+<div class="card">
+
+<h3>
+John Online Services
+</h3>
+
+<p>
+A collection of useful online digital services and applications.
+</p>
+
+<br>
+
+<a class="btn" href="https://johnonlineservices.netlify.app/">
+Visit App
+</a>
+
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>
+John Online Services Overhaul
+</h3>
+
+<p>
+A modern redesigned version with improved user experience.
+</p>
+
+
+<a class="btn" href="https://v0-john-online-services-overhaul.vercel.app/">
+Visit App
+</a>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+
+<h3>
+NBC Platform
+</h3>
+
+
+<p>
+A modern web application built for digital solutions.
+</p>
+
+
+<a class="btn" href="https://nbc1.vercel.app/">
+Visit App
+</a>
+
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<section id="contact">
+
+
+<h2 class="title">
+Contact Me
+</h2>
+
+
+<div style="text-align:center">
+
+
+<a class="btn" href="mailto:johncharlessarw@gmail.com">
+
+Email Me
+
+</a>
+
+
+
+<a class="btn" href="https://wa.me/255698170989">
+
+WhatsApp
+
+</a>
+
+
+
+<a class="btn" href="https://github.com/johncharlessarwi">
+
+GitHub
+
+</a>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+<footer>
+
+© 2026 John Charles Sarwi. All Rights Reserved.
+
+</footer>
+
+
 
 </body>
+
 </html>
