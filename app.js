@@ -67,25 +67,25 @@ function timeAgo(value){const d=Date.now()-new Date(value).getTime(),m=Math.max(
 async function loadDeployments(){
  const list=$("deployments-list"),status=$("deploy-status");
  if(!list||!status)return;
- status.textContent="CHECKING VERCEL…";
+ status.textContent="CHECKING DELIVERY ACTIVITY…";
  try{
   const r=await fetch("/api/deployments",{headers:{Accept:"application/json"},cache:"no-store"});
   if(r.status===503){
-   status.textContent="VERCEL FEED NEEDS CONFIGURATION";
-   list.innerHTML='<div class="empty">The deployment feed is not configured yet. Add the server-side Vercel API token, then redeploy the portfolio. <a href="./docs/VERCEL_DEPLOYMENT_FEED_SETUP.md">Read the setup guide ↗</a></div>';
+   status.textContent="DELIVERY ACTIVITY UNAVAILABLE";
+   list.innerHTML='<div class="empty">Public workflow activity is temporarily unavailable. Please refresh in a moment.</div>';
    return;
   }
   if(!r.ok)throw Error("Deployment feed unavailable");
   const data=await r.json(),items=data.deployments||[];
-  status.textContent="LIVE VERCEL DATA · "+items.length+" RECENT DEPLOYMENTS";
+  status.textContent="LIVE GITHUB ACTIONS · "+items.length+" RECENT WORKFLOW RUNS";
   list.innerHTML=items.length?items.map(d=>{
    const state=String(d.state||"unknown").toLowerCase(),name=d.projectName||d.project||"Vercel project";
    const title=d.commitMessage||"Deployment update";
    const shortSha=d.commitSha?d.commitSha.slice(0,7):"source";
    const href=d.url?(d.url.startsWith("http")?d.url:"https://"+d.url):null;
-   return '<article class="deploy-card"><div class="deploy-card-top"><span>'+safe(name)+'</span><span class="deploy-state '+safe(state)+'">'+safe(d.state||"UNKNOWN")+'</span></div><h3>'+safe(title)+'</h3><p>'+(d.branch?"Branch: "+safe(d.branch)+" · ":"")+safe(d.commitRef||"Production deployment")+'</p><div class="deploy-meta"><span>'+safe(shortSha)+' · '+safe(timeAgo(d.createdAt))+'</span>'+(href?'<a href="'+safe(href)+'" target="_blank" rel="noreferrer">Open deployment ↗</a>':"<span>URL unavailable</span>")+'</div></article>'
+   return '<article class="deploy-card"><div class="deploy-card-top"><span>'+safe(name)+'</span><span class="deploy-state '+safe(state)+'">'+safe(d.state||"UNKNOWN")+'</span></div><h3>'+safe(title)+'</h3><p>'+(d.branch?"Branch: "+safe(d.branch)+" · ":"")+safe(d.commitRef||"Production deployment")+'</p><div class="deploy-meta"><span>'+safe(shortSha)+' · '+safe(timeAgo(d.createdAt))+'</span>'+(href?'<a href="'+safe(href)+'" target="_blank" rel="noreferrer">View workflow ↗</a>':"<span>URL unavailable</span>")+'</div></article>'
   }).join(""):'<div class="empty">No recent Vercel deployments were returned.</div>';
- }catch(e){status.textContent="VERCEL FEED UNAVAILABLE";list.innerHTML='<div class="empty">The deployment feed could not be loaded. Check the Vercel token permissions and try again. <a href="./docs/VERCEL_DEPLOYMENT_FEED_SETUP.md">View setup and troubleshooting ↗</a></div>'}
+ }catch(e){status.textContent="DELIVERY ACTIVITY UNAVAILABLE";list.innerHTML='<div class="empty">The public workflow feed could not be loaded. Check GitHub Actions and refresh shortly.</div>'}
 }
 async function submitProject(e){
  e.preventDefault();
