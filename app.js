@@ -88,5 +88,6 @@ document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>$(
 $("refresh-deployments")?.addEventListener("click",loadDeployments);
 $("project-form")?.addEventListener("submit",submitProject);
 $("year").textContent=new Date().getFullYear();
+if ($("form-started-at")) $("form-started-at").value=String(Date.now());
 loadProjects();loadEvents();loadDeployments();
 setInterval(loadEvents,300000);setInterval(loadDeployments,300000);
