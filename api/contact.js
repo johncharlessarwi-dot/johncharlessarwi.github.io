@@ -17,7 +17,7 @@ module.exports = async function handler(req, res) {
   if (!process.env.GOOGLE_APPS_SCRIPT_URL)
     return res.status(503).json({ error: "Order email is not configured yet. Please email johncharlessarwi@gmail.com directly." });
   const orderId = "JOS-" + new Date().toISOString().slice(0,10).replace(/-/g,"") + "-" + Math.random().toString(36).slice(2,7).toUpperCase();
-  const payload = { orderId, name, email, phone, company, service, budget, timeline, contactPreference, message, submittedAt: new Date().toISOString() };
+  const payload = { secret: process.env.ORDER_WEBHOOK_SECRET || "", orderId, name, email, phone, company, service, budget, timeline, contactPreference, message, submittedAt: new Date().toISOString() };
   try {
     const response = await fetch(process.env.GOOGLE_APPS_SCRIPT_URL, {
       method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
