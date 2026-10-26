@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   contact-api-tests:
-    name: Contact API tests
+    name: Portfolio tests
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -21,4 +21,4 @@ jobs:
         with:
           node-version: 22
       - name: Run contact API tests
-        run: node --test tests/contact-api.test.js
+        run: node --test tests/*.test.js
