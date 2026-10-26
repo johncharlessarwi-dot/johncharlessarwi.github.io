@@ -1,75 +1,29 @@
-# John Charles Sarwi
+# John Charles Sarwi — Developer Portfolio
 
-Welcome to my personal website and developer portfolio.
+A responsive developer portfolio with live GitHub repository discovery and recent public activity.
 
-I am a passionate software developer focused on building modern, practical, and impactful digital solutions. I enjoy exploring emerging technologies, creating web applications, and using programming to solve real-world problems.
+**Website:** https://johncharlessarwi.github.io/  
+**GitHub:** https://github.com/johncharlessarwi-dot
 
-## About Me
+## Features
+- Responsive, premium dark interface with mobile navigation.
+- Live GitHub profile statistics and public repository discovery.
+- Featured projects with live demo links where available.
+- Search and category filters.
+- Recent public GitHub events (pushes, repository creation, pull requests, releases).
+- SEO metadata and accessible reduced-motion support.
+- Static hosting; no database, API key or private credential required.
 
-I am interested in technology, software development, artificial intelligence, and building tools that improve how people interact with digital systems.
+## Stack
+HTML, CSS, vanilla JavaScript, GitHub REST API.
 
-My main areas of interest include:
+## Run locally
+Open `index.html` or run `python -m http.server 8000`.
 
-- Full-stack web development
-- Modern JavaScript and TypeScript applications
-- Backend development with Node.js and Express
-- Artificial Intelligence integrations
-- API development
-- Creating user-focused digital experiences
+## GitHub data
+Uses public endpoints for `/users/johncharlessarwi-dot`, public repositories and public events. GitHub applies unauthenticated rate limits. Private repositories and private activity are never exposed.
 
-I believe in continuous learning, experimenting with new technologies, and turning ideas into working solutions.
-
-## Skills & Technologies
-
-### Programming Languages
-- JavaScript
-- TypeScript
-- HTML5
-- CSS3
-
-### Development Tools & Frameworks
-- Node.js
-- Express.js
-- Vite
-- Git & GitHub
-
-### Areas of Interest
-- Web Applications
-- AI-powered applications
-- Software Engineering
-- Automation tools
-- Digital problem solving
-
-## Projects
-
-Here are some of the projects I am working on and exploring:
-
-### AI-Powered Applications
-Building applications that combine modern web technologies with artificial intelligence to create smarter digital experiences.
-
-### Web Development Projects
-Creating responsive and interactive websites and applications using modern frontend and backend technologies.
-
-### Developer Experiments
-Exploring new frameworks, APIs, and programming techniques to improve my development skills.
-
-More projects will be added as I continue building and learning.
-
-## My Development Goals
-
-- Build reliable and scalable software solutions
-- Improve my full-stack development skills
-- Explore artificial intelligence and machine learning technologies
-- Contribute to open-source projects
-- Create applications that provide real value to users
-
-## Connect With Me
-
-GitHub:
-https://github.com/johncharlessarwi
-
-I am always interested in learning, collaborating, and connecting with other developers and technology enthusiasts.
-
----
+## Add featured projects
+Edit the `featured` array in `app.js`. All remaining public repositories are discovered automatically.
 
 © John Charles Sarwi
