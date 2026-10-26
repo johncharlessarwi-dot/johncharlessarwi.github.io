@@ -49,7 +49,19 @@ test("resume does not publish an outdated expected graduation range", () => {
   assert.ok(!resume.includes("2024 – 2027 (Expected)"));
 });
 
-test("sitemap includes all public portfolio pages", () => {
+
+test("delivery panel accurately identifies GitHub Actions workflow activity", () => {
+  const html = read("index.html");
+  const app = read("app.js");
+  const readme = read("README.md");
+  assert.ok(html.includes("05 / DELIVERY ACTIVITY"));
+  assert.ok(html.includes("Recent GitHub Actions workflow runs"));
+  assert.ok(app.includes("LIVE GITHUB ACTIONS"));
+  assert.ok(app.includes("View workflow"));
+  assert.ok(!app.includes("No recent Vercel deployments"));
+  assert.ok(readme.includes("No API token is required"));
+});
+\ntest("sitemap includes all public portfolio pages", () => {
   const sitemap = read("sitemap.xml");
   for (const page of ["/", "/about.html", "/projects.html", "/services.html", "/resume.html", "/contact.html", "/bizflow-ai.html"]) {
     assert.ok(sitemap.includes("https://john-charles-sarwi-portfolio.vercel.app" + page), page + " must be discoverable");
