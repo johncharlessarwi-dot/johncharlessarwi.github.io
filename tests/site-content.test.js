@@ -61,7 +61,8 @@ test("delivery panel accurately identifies GitHub Actions workflow activity", ()
   assert.ok(!app.includes("No recent Vercel deployments"));
   assert.ok(readme.includes("No API token is required"));
 });
-\ntest("sitemap includes all public portfolio pages", () => {
+
+test("sitemap includes all public portfolio pages", () => {
   const sitemap = read("sitemap.xml");
   for (const page of ["/", "/about.html", "/projects.html", "/services.html", "/resume.html", "/contact.html", "/bizflow-ai.html"]) {
     assert.ok(sitemap.includes("https://john-charles-sarwi-portfolio.vercel.app" + page), page + " must be discoverable");
