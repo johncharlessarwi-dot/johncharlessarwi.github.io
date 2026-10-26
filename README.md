@@ -9,6 +9,7 @@ A responsive developer portfolio with live GitHub repository discovery, public a
 - Responsive premium dark interface with mobile navigation.
 - Live GitHub profile statistics and public repository discovery.
 - Featured projects with live demo links where available.
+- Interactive project overview dialogs with repository details, technology tags, last-updated dates and source/live links.
 - Search and category filters across public repositories.
 - Recent public GitHub events, refreshed every five minutes.
 - Per-project changelog showing the latest public commit message and commit link for each featured repository.
