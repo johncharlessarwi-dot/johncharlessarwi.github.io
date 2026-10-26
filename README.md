@@ -34,7 +34,7 @@ Open `index.html` to inspect the static interface. Vercel serverless endpoints u
 Run the API tests with Node.js 20 or newer:
 
 ```bash
-node --test tests/contact-api.test.js
+node --test tests/*.test.js
 ```
 
 ## Required Vercel environment variables
