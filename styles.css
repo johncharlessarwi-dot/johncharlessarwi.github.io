@@ -30,3 +30,16 @@
 .form-actions button:disabled{opacity:.6;cursor:wait}
 #form-status{font-size:10px;color:#9aabc1;line-height:1.6}
 @media(max-width:580px){.deployments-list{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.deploy-toolbar{margin-top:0}}
+
+
+/* Per-project commit changelog */
+.updates-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 16px;font:9px var(--mono);letter-spacing:.09em;color:#8fa2bb}
+.updates-toolbar a{color:var(--cyan);white-space:nowrap}
+.project-updates-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.update-card{min-width:0;padding:18px;background:#0c1727;border:1px solid var(--line)}
+.update-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.update-top b{font-size:12px;color:#edf4ff}
+.update-top time{font:8px var(--mono);color:#8fa2bb;text-align:right}
+.update-card p{font-size:11px;line-height:1.7;color:#b5c3d5;overflow-wrap:anywhere;margin:16px 0}
+.update-card a{font:9px var(--mono);color:var(--cyan)}
+@media(max-width:580px){.project-updates-list{grid-template-columns:1fr}.update-top{flex-direction:column}.update-top time{text-align:left}}
