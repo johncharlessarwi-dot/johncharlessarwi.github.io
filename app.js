@@ -17,7 +17,7 @@ function category(r){const s=(r.name+" "+(r.description||"")).toLowerCase();retu
 function renderProjects(){
  const shown=projects.filter(p=>(filter==="all"||p.category===filter)&&(p.title+" "+p.description+" "+p.tags.join(" ")).toLowerCase().includes(query));
  $("count").textContent="SHOWING "+shown.length+" / "+projects.length+" PROJECTS";
- $("projects").innerHTML=shown.length?shown.map(p=>'<article class="card"><div class="cardtop"><span>'+({web:"WEB APPLICATION",ai:"AI & AUTOMATION",systems:"BUSINESS SYSTEM"}[p.category])+'</span><span>★ '+(p.stars||0)+'</span></div><h3>'+safe(p.title)+'</h3><p>'+safe(p.description||"A public software project by John Charles Sarwi. Explore the source for more details.")+'</p><div class="cardtags">'+p.tags.slice(0,3).map(t=>"<span>"+safe(t)+"</span>").join("")+'</div><div class="cardlinks">'+(p.url?'<a href="'+safe(p.url)+'" target="_blank" rel="noreferrer">Source code ↗</a>':'<span>Private source</span>')+(p.live?'<a href="'+safe(p.live)+'" target="_blank" rel="noreferrer">Live preview ↗</a>':"")+'</div></article>').join(""):'<div class="empty">No projects match your search.</div>';
+ $("projects").innerHTML=shown.length?shown.map(p=>'<article class="card"><div class="cardtop"><span>'+({web:"WEB APPLICATION",ai:"AI & AUTOMATION",systems:"BUSINESS SYSTEM"}[p.category])+'</span><span>★ '+(p.stars||0)+'</span></div><h3>'+safe(p.title)+'</h3><p>'+safe(p.description||"A public software project by John Charles Sarwi. Explore the source for more details.")+'</p><div class="cardtags">'+p.tags.slice(0,3).map(t=>"<span>"+safe(t)+"</span>").join("")+'</div><div class="cardlinks"><button class="case-study-trigger" type="button" data-case-study="'+safe(p.name)+'">Case study ↗</button>'+(p.url?'<a href="'+safe(p.url)+'" target="_blank" rel="noreferrer">Source code ↗</a>':'<span>Private source</span>')+(p.live?'<a href="'+safe(p.live)+'" target="_blank" rel="noreferrer">Live preview ↗</a>':"")+'</div></article>').join(""):'<div class="empty">No projects match your search.</div>';
 }
 async function loadProjects(){
  try{
@@ -96,6 +96,21 @@ async function submitProject(e){
  }catch(err){status.textContent=err.message+" You can also email johncharlessarwi@gmail.com directly."}
  finally{button.disabled=false;button.textContent="Send project request ↗"}
 }
+const caseDialog=$("case-study-dialog");
+$("projects").addEventListener("click",e=>{
+ const trigger=e.target.closest("[data-case-study]");if(!trigger)return;
+ const p=projects.find(x=>x.name===trigger.dataset.caseStudy);if(!p||!caseDialog)return;
+ $("case-study-category").textContent=({web:"WEB APPLICATION",ai:"AI & AUTOMATION",systems:"BUSINESS SYSTEM"}[p.category]||"PROJECT");
+ $("case-study-title").textContent=p.title;
+ $("case-study-summary").textContent=p.description||"A public software project by John Charles Sarwi.";
+ $("case-study-tags").innerHTML=(p.tags||[]).map(t=>"<span>"+safe(t)+"</span>").join("");
+ $("case-study-repository").textContent=p.name;
+ $("case-study-updated").textContent=p.updated_at?"Repository last updated "+new Date(p.updated_at).toLocaleDateString():"Explore the source repository for implementation details.";
+ $("case-study-links").innerHTML=(p.live?'<a class="primary" href="'+safe(p.live)+'" target="_blank" rel="noreferrer">Open live project ↗</a>':"")+(p.url?'<a class="secondary" href="'+safe(p.url)+'" target="_blank" rel="noreferrer">Explore source ↗</a>':"");
+ caseDialog.showModal();
+});
+$("case-study-close").addEventListener("click",()=>caseDialog.close());
+caseDialog.addEventListener("click",e=>{if(e.target===caseDialog)caseDialog.close()});
 $("filters").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("active",x===b));renderProjects()});
 $("search").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();renderProjects()});
 $("menu").addEventListener("click",()=>$("nav").classList.toggle("open"));
