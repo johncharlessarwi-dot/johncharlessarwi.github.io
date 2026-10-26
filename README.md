@@ -2,7 +2,7 @@
 
 A responsive developer portfolio with live GitHub repository discovery and recent public activity.
 
-**Website:** https://johncharlessarwi.github.io/  
+**Website:** https://john-charles-sarwi-portfolio.vercel.app/  
 **GitHub:** https://github.com/johncharlessarwi-dot
 
 ## Features
