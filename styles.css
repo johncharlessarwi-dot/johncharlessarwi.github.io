@@ -63,3 +63,24 @@
 .case-study-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .case-study-disclaimer{font-size:9px;line-height:1.7;color:#8192a9;margin:22px 0 0}
 @media(max-width:580px){.case-study-dialog{padding:22px}.cardlinks{flex-wrap:wrap}}
+
+
+/* Dual audience: international developer career and service-business conversion */
+.dual-path{padding-top:92px;padding-bottom:28px}
+.path-intro{max-width:650px;margin-bottom:28px}
+.path-intro h2{font-size:clamp(32px,4.5vw,50px);line-height:1.12;letter-spacing:-.06em;margin:14px 0}
+.path-intro>p{max-width:540px;color:var(--muted);font-size:12px;line-height:1.9}
+.path-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.path-card{position:relative;min-width:0;padding:27px;background:linear-gradient(145deg,#14243a,#0a1422);border:1px solid var(--line);display:flex;flex-direction:column}
+.path-card.business-path{background:radial-gradient(ellipse at 100% 0%,#4d8b7840,transparent 48%),linear-gradient(145deg,#142b2d,#0a1720)}
+.path-index{font:9px var(--mono);letter-spacing:.1em;color:var(--cyan)}
+.business-path .path-index{color:#8fe0b2}
+.path-card h3{font-size:clamp(22px,2.6vw,30px);line-height:1.2;letter-spacing:-.045em;margin:27px 0 12px}
+.path-card>p{font-size:11px;line-height:1.9;color:var(--muted);flex:1;margin:0 0 24px}
+.path-actions{display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin-bottom:22px}
+.path-actions .primary{font-size:10px}
+.path-actions>a:not(.primary){font-size:10px;color:#c4d2e2}
+.path-actions>a:hover{color:var(--cyan)}
+.path-tags{display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}
+.path-tags span{font:8px var(--mono);letter-spacing:.04em;color:#9aabc1;padding:6px 7px;border:1px solid var(--line)}
+@media(max-width:700px){.dual-path{padding-top:70px}.path-grid{grid-template-columns:1fr}.path-card{padding:22px}.path-card h3{margin-top:20px}}
