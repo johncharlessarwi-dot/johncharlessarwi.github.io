@@ -1,6 +1,6 @@
 # John Charles Sarwi — Developer Portfolio
 
-A responsive developer portfolio with GitHub project discovery, public activity, a Vercel deployment feed, and a project enquiry form.
+A responsive developer portfolio with GitHub project discovery, public activity, a GitHub Actions delivery activity feed, and a project enquiry form.
 
 **Website:** https://john-charles-sarwi-portfolio.vercel.app/  
 **GitHub:** https://github.com/johncharlessarwi-dot
@@ -11,7 +11,7 @@ A responsive developer portfolio with GitHub project discovery, public activity,
 - Public GitHub profile statistics, repository discovery, and recent activity.
 - Featured projects, searchable project cards, and category filters.
 - Project changelog linking to public commits.
-- Vercel deployment feed for connected projects.
+- Public GitHub Actions delivery activity, including workflow status and commit links.
 - Project enquiry form with server-side validation, a honeypot, and unique order references.
 - Google Apps Script + Gmail order notifications and customer acknowledgement.
 - SEO metadata and reduced-motion support.
@@ -45,8 +45,6 @@ Configure these in Vercel Project Settings → Environment Variables. Keep all v
 | --- | --- |
 | `GOOGLE_APPS_SCRIPT_URL` | Deployed Google Apps Script Web App URL ending in `/exec`. |
 | `ORDER_WEBHOOK_SECRET` | Shared secret used to authenticate Vercel-to-Apps-Script requests. |
-| `VERCEL_API_TOKEN` | Optional server-side token for the deployments feed. |
-| `VERCEL_TEAM_ID` | Optional team ID for the deployments feed. |
 
 After changing Vercel environment variables, redeploy the project. The Apps Script project must separately store the same `ORDER_WEBHOOK_SECRET` in Script properties. The optional `ORDER_INBOX` property controls the notification destination; the default is `johncharlessarwi@gmail.com`.
 
@@ -60,7 +58,7 @@ The form must not show a successful order state unless the Apps Script response 
 
 - [Order email deployment setup](docs/ORDER_EMAIL_SETUP.md)
 - [Order email troubleshooting and error recovery](docs/ORDER_EMAIL_TROUBLESHOOTING.md)
-- [Vercel deployment feed setup](docs/VERCEL_DEPLOYMENT_FEED_SETUP.md)
+- [Delivery activity feed documentation](docs/VERCEL_DEPLOYMENT_FEED_SETUP.md)
 - [API tests](tests/contact-api.test.js)
 
 A successful API response means the server-side handler accepted the mail script's success response. Confirm actual receipt in the relevant Inbox/Spam folders before declaring end-to-end email delivery verified.
@@ -69,9 +67,9 @@ A successful API response means the server-side handler accepted the mail script
 
 The portfolio uses public GitHub endpoints for profile statistics, public repositories, and public events. Unauthenticated API rate limits apply. Private repositories and private activity are not exposed.
 
-## Vercel deployment feed
+## Delivery activity feed
 
-The server-side deployments endpoint reads deployment information visible to the configured Vercel team. If the token is missing or lacks access, the page should show a configuration message rather than inventing deployment data.
+The server-side `/api/deployments` endpoint reads public GitHub Actions workflow-run metadata. No API token is required. The panel reports CI/CD workflow activity and links to each run; it is not a complete Vercel production deployment history.
 
 ## Add featured projects
 
