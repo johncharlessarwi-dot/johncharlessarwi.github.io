@@ -24,9 +24,9 @@ async function loadProjects(){
   const [profile,repos]=await Promise.all([api("/users/"+USER),api("/users/"+USER+"/repos?type=public&sort=updated&per_page=100")]);
   $("repos").textContent=profile.public_repos;$("followers").textContent=profile.followers;$("stars").textContent=repos.reduce((n,r)=>n+r.stargazers_count,0);$("sync").textContent="LIVE DATA · GITHUB PROFILE SYNCED";
   const map=new Map(repos.map(r=>[r.name.toLowerCase(),r]));
-  const top=featured.map(p=>{const r=map.get(p.name.toLowerCase());return {...p,url:r?.html_url||null,stars:r?.stargazers_count||0}});
+  const top=featured.map(p=>{const r=map.get(p.name.toLowerCase());return {...p,url:r?.html_url||null,stars:r?.stargazers_count||0,updated_at:r?.updated_at||null}});
   const names=new Set(featured.map(p=>p.name.toLowerCase()));
-  const rest=repos.filter(r=>!names.has(r.name.toLowerCase())).map(r=>({name:r.name,title:r.name.replace(/[-_]/g," ").replace(/\b\w/g,c=>c.toUpperCase()),category:category(r),description:r.description||"A public repository by John Charles Sarwi. Explore the source for details.",url:r.html_url,stars:r.stargazers_count,tags:[r.language||"Software",r.fork?"Fork":"GitHub"]}));
+  const rest=repos.filter(r=>!names.has(r.name.toLowerCase())).map(r=>({name:r.name,title:r.name.replace(/[-_]/g," ").replace(/\b\w/g,c=>c.toUpperCase()),category:category(r),description:r.description||"A public repository by John Charles Sarwi. Explore the source for details.",url:r.html_url,stars:r.stargazers_count,updated_at:r.updated_at,tags:[r.language||"Software",r.fork?"Fork":"GitHub"]}));
   projects=[...top,...rest];renderProjects();
  }catch(e){$("sync").textContent="GITHUB DATA TEMPORARILY UNAVAILABLE";$("projects").innerHTML='<div class="empty">GitHub is temporarily unavailable. <a href="https://github.com/'+USER+'?tab=repositories">Browse repositories directly ↗</a></div>'}
 }
