@@ -42,6 +42,13 @@ test("project page does not link directly to known private repositories", () => 
   }
 });
 
+
+test("resume does not publish an outdated expected graduation range", () => {
+  const resume = read("resume.html");
+  assert.ok(resume.includes("Currently enrolled"));
+  assert.ok(!resume.includes("2024 – 2027 (Expected)"));
+});
+
 test("sitemap includes all public portfolio pages", () => {
   const sitemap = read("sitemap.xml");
   for (const page of ["/", "/about.html", "/projects.html", "/services.html", "/resume.html", "/contact.html", "/bizflow-ai.html"]) {
