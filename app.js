@@ -118,8 +118,6 @@ $("case-study-close").addEventListener("click",()=>caseDialog.close());
 caseDialog.addEventListener("click",e=>{if(e.target===caseDialog)caseDialog.close()});
 $("filters").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("active",x===b));renderProjects()});
 $("search").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();renderProjects()});
-$("menu").addEventListener("click",()=>$("nav").classList.toggle("open"));
-document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>$("nav").classList.remove("open")));
 $("refresh-deployments")?.addEventListener("click",loadDeployments);
 const projectForm=$("project-form");
 if(projectForm){
