@@ -68,3 +68,25 @@ test("sitemap includes all public portfolio pages", () => {
     assert.ok(sitemap.includes("https://john-charles-sarwi-portfolio.vercel.app" + page), page + " must be discoverable");
   }
 });
+
+
+test("all primary pages expose an accessible, working shared mobile navigation", () => {
+  const pages = ["index.html", "about.html", "projects.html", "services.html", "contact.html"];
+  for (const page of pages) {
+    const html = read(page);
+    assert.ok(html.includes('id="menu"'), page + " must include the menu control");
+    assert.ok(html.includes('aria-controls="nav"'), page + " must connect the menu to navigation");
+    assert.ok(html.includes('aria-expanded="false"'), page + " must expose the collapsed state");
+    assert.ok(html.includes('./navigation.js'), page + " must load shared navigation behavior");
+  }
+  const navigation = read("navigation.js");
+  assert.ok(navigation.includes('event.key === "Escape"'));
+  assert.ok(navigation.includes('menu.setAttribute("aria-expanded"'));
+  assert.ok(navigation.includes('link.addEventListener("click"'));
+});
+
+test("tablet navigation collapses before the desktop header becomes crowded", () => {
+  const css = read("styles.css");
+  assert.ok(css.includes("@media(max-width:680px)"));
+  assert.ok(css.includes("nav.open{display:flex}"));
+});
