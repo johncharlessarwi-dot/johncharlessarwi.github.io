@@ -9,8 +9,9 @@
 .deploy-card-top{display:flex;justify-content:space-between;gap:10px;align-items:center;font:9px var(--mono);color:#9aabc1}
 .deploy-state{display:inline-flex;align-items:center;gap:7px;text-transform:uppercase}
 .deploy-state:before{content:"";width:7px;height:7px;border-radius:50%;background:#8b9bb0}
-.deploy-state.ready:before{background:#55e6a4;box-shadow:0 0 10px #55e6a4}
-.deploy-state.error:before{background:#ff7777}
+.deploy-state.ready:before,.deploy-state.success:before{background:#55e6a4;box-shadow:0 0 10px #55e6a4}
+.deploy-state.error:before,.deploy-state.failure:before,.deploy-state.cancelled:before{background:#ff7777}
+.deploy-state.in_progress:before,.deploy-state.queued:before{background:#f2c46d}
 .deploy-card h3{font-size:15px;margin:17px 0 7px;overflow-wrap:anywhere}
 .deploy-card p{font-size:10px;color:var(--muted);line-height:1.7;margin:0 0 14px;overflow-wrap:anywhere}
 .deploy-meta{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid var(--line);padding-top:12px;font:8px var(--mono);color:#8192a9}
