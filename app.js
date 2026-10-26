@@ -116,7 +116,14 @@ $("search").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim
 $("menu").addEventListener("click",()=>$("nav").classList.toggle("open"));
 document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>$("nav").classList.remove("open")));
 $("refresh-deployments")?.addEventListener("click",loadDeployments);
-$("project-form")?.addEventListener("submit",submitProject);
+const projectForm=$("project-form");
+if(projectForm){
+ const budgetField=projectForm.querySelector('[name="budget"]')?.closest("label");
+ if(budgetField){
+  budgetField.insertAdjacentHTML("afterend",'<label>EXPECTED TIMELINE<select name="timeline"><option value="">Choose expected timeline</option><option>As soon as possible</option><option>Within 1–2 weeks</option><option>Within 1 month</option><option>Within 1–3 months</option><option>Flexible / to be discussed</option></select></label><label>PREFERRED CONTACT<select name="contactPreference"><option value="">Email or phone</option><option>Email</option><option>WhatsApp</option><option>Phone call</option></select></label>');
+ }
+ projectForm.addEventListener("submit",submitProject);
+}
 $("year").textContent=new Date().getFullYear();
 if ($("form-started-at")) $("form-started-at").value=String(Date.now());
 loadProjects();loadEvents();loadDeployments();loadProjectUpdates();
