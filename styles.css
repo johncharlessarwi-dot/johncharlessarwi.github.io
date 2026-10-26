@@ -43,3 +43,23 @@
 .update-card p{font-size:11px;line-height:1.7;color:#b5c3d5;overflow-wrap:anywhere;margin:16px 0}
 .update-card a{font:9px var(--mono);color:var(--cyan)}
 @media(max-width:580px){.project-updates-list{grid-template-columns:1fr}.update-top{flex-direction:column}.update-top time{text-align:left}}
+
+
+/* Interactive project case study dialog */
+.case-study-trigger{border:0;background:transparent;color:var(--cyan);font:9px var(--mono);padding:0;cursor:pointer}
+.case-study-trigger:hover{text-decoration:underline;text-underline-offset:4px}
+.case-study-dialog{width:min(620px,calc(100% - 28px));max-height:min(82vh,760px);overflow:auto;padding:30px;background:linear-gradient(145deg,#14243a,#091321);border:1px solid #55e6e066;color:var(--text);box-shadow:0 30px 100px #000b}
+.case-study-dialog::backdrop{background:#02060dcc;backdrop-filter:blur(7px)}
+.case-study-head{display:flex;justify-content:space-between;align-items:center;font:9px var(--mono);letter-spacing:.12em;color:var(--cyan)}
+.case-study-head button{width:34px;height:34px;background:#ffffff0a;border:1px solid var(--line);color:var(--text);cursor:pointer}
+.case-study-dialog h2{font-size:clamp(28px,5vw,42px);letter-spacing:-.06em;margin:28px 0 10px}
+.case-study-summary{font-size:13px;line-height:1.9;color:#aebed1;margin-bottom:28px}
+.case-study-detail{border-block:1px solid var(--line);padding:22px 0}
+.case-study-detail label{display:block;margin:0 0 9px}
+.case-study-detail>p{font-size:11px;color:#b9c7d8;line-height:1.7;margin:0 0 20px}
+.case-study-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.case-study-tags span{font:9px var(--mono);padding:7px 9px;border:1px solid var(--line);color:#c2d0e1}
+.case-study-detail .case-study-updated{margin:0;color:#8293aa}
+.case-study-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.case-study-disclaimer{font-size:9px;line-height:1.7;color:#8192a9;margin:22px 0 0}
+@media(max-width:580px){.case-study-dialog{padding:22px}.cardlinks{flex-wrap:wrap}}
