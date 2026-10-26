@@ -11,7 +11,8 @@ A responsive developer portfolio with live GitHub repository discovery, public a
 - Featured projects with live demo links where available.
 - Search and category filters across public repositories.
 - Recent public GitHub events, refreshed every five minutes.
-- Vercel deployment feed showing project, deployment state, commit summary, branch and deployment URL.
+- Per-project changelog showing the latest public commit message and commit link for each featured repository.
+- Vercel deployment feed covering connected Vercel projects, showing project, deployment state, commit summary, branch and deployment URL.
 - Project enquiry form for name, email, phone, organisation, service, budget and requirements.
 - Server-side email delivery through Resend; fixed recipient defaults to the portfolio owner's inbox.
 - Input validation, output escaping, honeypot field and safe server-side API credentials.
