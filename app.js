@@ -5,7 +5,7 @@ const featured=[
 {name:"wpms",title:"WPMS — Pharmacy ERP",category:"systems",description:"A multi-branch pharmaceutical system for stock, sales, purchasing and pharmacy operations.",live:"https://wpms-ten.vercel.app/",tags:["Next.js","Prisma","PostgreSQL"]},
 {name:"BHOKE-AGROVERT-SYSTEM",title:"Bhoke Agrovet System",category:"systems",description:"An agrovet management platform for products, inventory, sales and customer orders.",tags:["Inventory","Business system"]},
 {name:"JOB-CRAFT-AGENTIC-AI",title:"John JobCraft AI",category:"ai",description:"An AI-powered CV and career workflow concept for stronger job applications.",tags:["AI","Career tech","Automation"]},
-{name:"safenet",title:"SafeNet",category:"systems",description:"Network access and FreeRADIUS management tooling for safer infrastructure.",tags:["Python","Flask","Networking"]},
+{name:"safe-net",title:"SafeNet",category:"systems",description:"Network access and FreeRADIUS management tooling for safer infrastructure.",tags:["Python","Flask","Networking"]},
 {name:"campusconnectapp",title:"Campus Connect",category:"web",description:"A campus-focused platform to help students discover useful university information.",tags:["Web app","Student tech"]},
 {name:"agentic-tourism-platform",title:"Agentic Tourism Platform",category:"ai",description:"AI-enabled tourism experiences and intelligent travel workflows.",tags:["AI","Tourism","Automation"]}
 ];
