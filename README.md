@@ -19,6 +19,13 @@ A responsive developer portfolio with live GitHub repository discovery, public a
 - Input validation, output escaping, honeypot field and safe server-side API credentials.
 - SEO metadata and reduced-motion support.
 
+## Dual-purpose positioning
+The portfolio serves two distinct audiences from one professional profile:
+- **International developer career:** software engineering roles, internships, remote opportunities and technical collaborations.
+- **JOHN ONLINE SERVICES AND APPLICATIONS:** websites, custom business systems, POS/ERP solutions and AI-enabled workflow automation.
+
+The home page provides separate career and business calls to action so visitors can follow the right enquiry path.
+
 ## Stack
 HTML, CSS, vanilla JavaScript, GitHub REST API, Vercel Node.js Functions and Resend API.
 
