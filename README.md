@@ -58,7 +58,7 @@ The form must not show a successful order state unless the Apps Script response 
 
 - [Order email deployment setup](docs/ORDER_EMAIL_SETUP.md)
 - [Order email troubleshooting and error recovery](docs/ORDER_EMAIL_TROUBLESHOOTING.md)
-- [Delivery activity feed documentation](docs/VERCEL_DEPLOYMENT_FEED_SETUP.md)
+- [Delivery activity feed documentation](docs/DELIVERY_ACTIVITY_FEED.md)
 - [API tests](tests/contact-api.test.js)
 
 A successful API response means the server-side handler accepted the mail script's success response. Confirm actual receipt in the relevant Inbox/Spam folders before declaring end-to-end email delivery verified.
