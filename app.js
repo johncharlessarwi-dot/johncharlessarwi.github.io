@@ -92,7 +92,7 @@ async function submitProject(e){
   const response=await fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
   const result=await response.json().catch(()=>({}));
   if(!response.ok)throw Error(result.error||"Unable to send your request right now.");
-  form.reset();status.textContent="Request received. Thank you — I'll get back to you by email.";
+  form.reset();status.textContent="Request received successfully. Your reference number is "+(result.orderId||"pending confirmation")+". A confirmation email will be sent to you.";
  }catch(err){status.textContent=err.message+" You can also email johncharlessarwi@gmail.com directly."}
  finally{button.disabled=false;button.textContent="Send project request ↗"}
 }
