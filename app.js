@@ -48,6 +48,21 @@ async function loadEvents(){
   $("activitytime").textContent="UPDATED "+new Date().toLocaleTimeString("en",{hour:"2-digit",minute:"2-digit"});
  }catch(e){$("events").textContent="Public activity is temporarily unavailable.";$("activitytime").textContent="OFFLINE"}
 }
+async function loadProjectUpdates(){
+ const box=$("project-updates"),label=$("project-updates-status");
+ if(!box||!label)return;
+ label.textContent="CHECKING PROJECT REPOSITORIES…";
+ const targets=featured.slice(0,8);
+ const results=await Promise.allSettled(targets.map(async p=>{
+  const r=await api("/repos/"+USER+"/"+encodeURIComponent(p.name)+"/commits?per_page=1");
+  if(!r.length)return null;
+  const c=r[0],commit=c.commit||{};
+  return {project:p.title,repo:p.name,sha:c.sha,message:commit.message||"Code update",date:commit.author?.date||commit.committer?.date||null,url:c.html_url};
+ }));
+ const updates=results.filter(x=>x.status==="fulfilled"&&x.value).map(x=>x.value).sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+ label.textContent=updates.length+" PROJECT REPOSITORIES · LATEST COMMIT PER PROJECT";
+ box.innerHTML=updates.length?updates.map(u=>'<article class="update-card"><div class="update-top"><b>'+safe(u.project)+'</b><time>'+safe(u.date?new Date(u.date).toLocaleString("en",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"Date unavailable")+'</time></div><p>'+safe(u.message.split("\\n")[0])+'</p><a href="'+safe(u.url)+'" target="_blank" rel="noreferrer">View commit · '+safe(u.sha.slice(0,7))+' ↗</a></article>').join(""):'<p class="empty">No recent commit details could be loaded for the featured repositories.</p>';
+}
 function timeAgo(value){const d=Date.now()-new Date(value).getTime(),m=Math.max(0,Math.floor(d/60000));if(m<60)return m+"m ago";if(m<1440)return Math.floor(m/60)+"h ago";return Math.floor(m/1440)+"d ago"}
 async function loadDeployments(){
  const list=$("deployments-list"),status=$("deploy-status");
@@ -89,5 +104,5 @@ $("refresh-deployments")?.addEventListener("click",loadDeployments);
 $("project-form")?.addEventListener("submit",submitProject);
 $("year").textContent=new Date().getFullYear();
 if ($("form-started-at")) $("form-started-at").value=String(Date.now());
-loadProjects();loadEvents();loadDeployments();
+loadProjects();loadEvents();loadDeployments();loadProjectUpdates();
 setInterval(loadEvents,300000);setInterval(loadDeployments,300000);
