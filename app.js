@@ -70,6 +70,11 @@ async function loadDeployments(){
  status.textContent="CHECKING VERCEL…";
  try{
   const r=await fetch("/api/deployments",{headers:{Accept:"application/json"},cache:"no-store"});
+  if(r.status===503){
+   status.textContent="VERCEL FEED NEEDS CONFIGURATION";
+   list.innerHTML='<div class="empty">The deployment feed is not configured yet. Add the server-side Vercel API token, then redeploy the portfolio. <a href="./docs/VERCEL_DEPLOYMENT_FEED_SETUP.md">Read the setup guide ↗</a></div>';
+   return;
+  }
   if(!r.ok)throw Error("Deployment feed unavailable");
   const data=await r.json(),items=data.deployments||[];
   status.textContent="LIVE VERCEL DATA · "+items.length+" RECENT DEPLOYMENTS";
@@ -80,7 +85,7 @@ async function loadDeployments(){
    const href=d.url?(d.url.startsWith("http")?d.url:"https://"+d.url):null;
    return '<article class="deploy-card"><div class="deploy-card-top"><span>'+safe(name)+'</span><span class="deploy-state '+safe(state)+'">'+safe(d.state||"UNKNOWN")+'</span></div><h3>'+safe(title)+'</h3><p>'+(d.branch?"Branch: "+safe(d.branch)+" · ":"")+safe(d.commitRef||"Production deployment")+'</p><div class="deploy-meta"><span>'+safe(shortSha)+' · '+safe(timeAgo(d.createdAt))+'</span>'+(href?'<a href="'+safe(href)+'" target="_blank" rel="noreferrer">Open deployment ↗</a>':"<span>URL unavailable</span>")+'</div></article>'
   }).join(""):'<div class="empty">No recent Vercel deployments were returned.</div>';
- }catch(e){status.textContent="VERCEL FEED NEEDS CONFIGURATION";list.innerHTML='<div class="empty">The live deployment feed needs a Vercel API token configured in the project environment. Recent deployment updates will appear here once it is connected.</div>'}
+ }catch(e){status.textContent="VERCEL FEED UNAVAILABLE";list.innerHTML='<div class="empty">The deployment feed could not be loaded. Check the Vercel token permissions and try again. <a href="./docs/VERCEL_DEPLOYMENT_FEED_SETUP.md">View setup and troubleshooting ↗</a></div>'}
 }
 async function submitProject(e){
  e.preventDefault();
