@@ -66,8 +66,9 @@ test("sitemap includes all public portfolio pages", () => {
   const sitemap = read("sitemap.xml");
   for (const page of ["/", "/about.html", "/projects.html", "/services.html", "/resume.html", "/contact.html", "/bizflow-ai.html"]) {
     assert.ok(sitemap.includes("https://john-charles-sarwi-portfolio.vercel.app" + page), page + " must be discoverable");
-    const urlBlock = sitemap.match(new RegExp("<url><loc>https://john-charles-sarwi-portfolio\\.vercel\\.app" + page.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\assert.ok(sitemap.includes("https://john-charles-sarwi-portfolio.vercel.app" + page), page + " must be discoverable");") + "</loc><lastmod>[^<]+</lastmod>"));
-    assert.ok(urlBlock, page + " must include a last-modified date");
+    const urlBlock = sitemap.split("<url>").find(block => block.includes("<loc>https://john-charles-sarwi-portfolio.vercel.app" + page + "</loc>"));
+    assert.ok(urlBlock, page + " must have a sitemap URL block");
+    assert.match(urlBlock, /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/, page + " must include a valid last-modified date");
   }
 });
 
