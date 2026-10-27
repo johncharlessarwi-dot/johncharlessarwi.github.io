@@ -80,7 +80,7 @@ test("sitemap includes all public portfolio pages", () => {
     assert.ok(sitemap.includes("https://john-charles-sarwi-portfolio.vercel.app" + page), page + " must be discoverable");
     const urlBlock = sitemap.split("<url>").find(block => block.includes("<loc>https://john-charles-sarwi-portfolio.vercel.app" + page + "</loc>"));
     assert.ok(urlBlock, page + " must have a sitemap URL block");
-    assert.match(urlBlock, /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/, page + " must include a valid last-modified date");
+    assert.ok(!urlBlock.includes("<lastmod>"), page + " must not publish an unverified last-modified date");
   }
 });
 
@@ -186,4 +186,16 @@ test("secondary pages publish valid page and breadcrumb structured data", () => 
       assert.ok(!html.includes("graduate trainee pathways"));
     }
   }
+});
+
+test("custom software landing page answers buyer questions with matching FAQ structured data", () => {
+  const html = read("custom-software-development-tanzania.html");
+  const data = readJsonLd(html, "custom-software-development-tanzania.html");
+  const faq = data["@graph"].find(item => item["@type"] === "FAQPage");
+  assert.ok(faq, "custom software page must publish FAQ structured data");
+  assert.equal(faq.mainEntity.length, 4);
+  for (const phrase of ["What types of software can you develop?", "How does a custom software project begin?", "How much does custom software development cost in Tanzania?", "Can I discuss a project before committing?"]) {
+    assert.ok(html.includes(phrase), "visible FAQ must include: " + phrase);
+  }
+  assert.ok(html.includes('name="twitter:image"'));
 });
