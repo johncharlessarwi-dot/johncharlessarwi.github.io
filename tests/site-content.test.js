@@ -29,7 +29,7 @@ test("homepage has no literal escaped newline before activity content", () => {
 
 test("homepage section numbers are unique and sequential", () => {
   const html = read("index.html");
-  const labels = [...html.matchAll(/<label>(0[1-7]) \\/(?:[^<]+)<\\/label>/g)].map(match => match[1]);
+  const labels = [...html.matchAll(/<label>(0[1-7]) \/(?:[^<]+)<\/label>/g)].map(match => match[1]);
   assert.deepEqual(labels, ["01", "02", "03", "04", "05", "06", "07"]);
 });
 
@@ -73,7 +73,7 @@ test("sitemap includes all public portfolio pages", () => {
     assert.ok(sitemap.includes("https://john-charles-sarwi-portfolio.vercel.app" + page), page + " must be discoverable");
     const urlBlock = sitemap.split("<url>").find(block => block.includes("<loc>https://john-charles-sarwi-portfolio.vercel.app" + page + "</loc>"));
     assert.ok(urlBlock, page + " must have a sitemap URL block");
-    assert.match(urlBlock, /<lastmod>\\d{4}-\\d{2}-\\d{2}<\\/lastmod>/, page + " must include a valid last-modified date");
+    assert.match(urlBlock, /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/, page + " must include a valid last-modified date");
   }
 });
 
@@ -115,7 +115,7 @@ test("keyboard focus and mobile navigation controls have visible accessible targ
 
 test("homepage publishes valid person, organisation and website structured data", () => {
   const html = read("index.html");
-  const block = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/);
+  const block = html.match(/<script type="application\/ld\+json">([\s\\S]*?)<\/script>/);
   assert.ok(block, "homepage must include JSON-LD structured data");
   const data = JSON.parse(block[1]);
   assert.equal(data["@context"], "https://schema.org");
@@ -165,7 +165,7 @@ test("secondary pages publish valid page and breadcrumb structured data", () => 
   const pages = ["about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html", "software-developer-tanzania.html", "custom-software-development-tanzania.html"];
   for (const page of pages) {
     const html = read(page);
-    const block = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/);
+    const block = html.match(/<script type="application\/ld\+json">([\s\\S]*?)<\/script>/);
     assert.ok(block, page + " must include JSON-LD structured data");
     const data = JSON.parse(block[1]);
     assert.equal(data["@context"], "https://schema.org");
