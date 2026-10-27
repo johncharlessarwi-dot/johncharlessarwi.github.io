@@ -14,6 +14,13 @@ test("homepage navigation points to existing portfolio pages", () => {
   }
 });
 
+test("homepage links visitors to both career and custom software landing pages", () => {
+  const html = read("index.html");
+  assert.ok(html.includes('./software-developer-tanzania.html'));
+  assert.ok(html.includes('./custom-software-development-tanzania.html'));
+  assert.ok(read("services.html").includes('./custom-software-development-tanzania.html'));
+});
+
 test("homepage has no literal escaped newline before activity content", () => {
   const html = read("index.html");
   assert.ok(!html.includes('\\n<section class="band" id="activity">'));
@@ -22,7 +29,7 @@ test("homepage has no literal escaped newline before activity content", () => {
 
 test("homepage section numbers are unique and sequential", () => {
   const html = read("index.html");
-  const labels = [...html.matchAll(/<label>(0[1-7]) \/(?:[^<]+)<\/label>/g)].map(match => match[1]);
+  const labels = [...html.matchAll(/<label>(0[1-7]) \\/(?:[^<]+)<\\/label>/g)].map(match => match[1]);
   assert.deepEqual(labels, ["01", "02", "03", "04", "05", "06", "07"]);
 });
 
@@ -42,13 +49,11 @@ test("project page does not link directly to known private repositories", () => 
   }
 });
 
-
 test("resume does not publish an outdated expected graduation range", () => {
   const resume = read("resume.html");
   assert.ok(resume.includes("Currently enrolled"));
   assert.ok(!resume.includes("2024 – 2027 (Expected)"));
 });
-
 
 test("delivery panel accurately identifies GitHub Actions workflow activity", () => {
   const html = read("index.html");
@@ -64,14 +69,13 @@ test("delivery panel accurately identifies GitHub Actions workflow activity", ()
 
 test("sitemap includes all public portfolio pages", () => {
   const sitemap = read("sitemap.xml");
-  for (const page of ["/", "/about.html", "/projects.html", "/services.html", "/resume.html", "/contact.html", "/bizflow-ai.html"]) {
+  for (const page of ["/", "/about.html", "/projects.html", "/services.html", "/resume.html", "/contact.html", "/bizflow-ai.html", "/software-developer-tanzania.html", "/custom-software-development-tanzania.html"]) {
     assert.ok(sitemap.includes("https://john-charles-sarwi-portfolio.vercel.app" + page), page + " must be discoverable");
     const urlBlock = sitemap.split("<url>").find(block => block.includes("<loc>https://john-charles-sarwi-portfolio.vercel.app" + page + "</loc>"));
     assert.ok(urlBlock, page + " must have a sitemap URL block");
-    assert.match(urlBlock, /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/, page + " must include a valid last-modified date");
+    assert.match(urlBlock, /<lastmod>\\d{4}-\\d{2}-\\d{2}<\\/lastmod>/, page + " must include a valid last-modified date");
   }
 });
-
 
 test("all primary pages expose an accessible, working shared mobile navigation", () => {
   const pages = ["index.html", "about.html", "projects.html", "services.html", "contact.html"];
@@ -94,7 +98,6 @@ test("tablet navigation collapses before the desktop header becomes crowded", ()
   assert.ok(css.includes("nav.open{display:flex}"));
 });
 
-
 test("mobile layout keeps the hero visual and form controls usable on narrow screens", () => {
   const css = read("styles.css");
   assert.ok(css.includes(".visual{width:100%;max-width:420px;height:340px"));
@@ -110,10 +113,9 @@ test("keyboard focus and mobile navigation controls have visible accessible targ
   assert.ok(css.includes("#menu{min-width:44px;min-height:44px"));
 });
 
-
 test("homepage publishes valid person, organisation and website structured data", () => {
   const html = read("index.html");
-  const block = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  const block = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/);
   assert.ok(block, "homepage must include JSON-LD structured data");
   const data = JSON.parse(block[1]);
   assert.equal(data["@context"], "https://schema.org");
@@ -130,9 +132,8 @@ test("homepage includes canonical, Open Graph image and Twitter sharing metadata
   assert.ok(html.includes('name="description"'));
 });
 
-
 test("every indexable portfolio page has a unique canonical and social preview metadata", () => {
-  const pages = ["index.html", "about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html"];
+  const pages = ["index.html", "about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html", "software-developer-tanzania.html", "custom-software-development-tanzania.html"];
   const canonicals = [];
   for (const page of pages) {
     const html = read(page);
@@ -161,16 +162,25 @@ test("homepage prioritizes its profile image and preconnects the font asset orig
 });
 
 test("secondary pages publish valid page and breadcrumb structured data", () => {
-  const pages = ["about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html"];
+  const pages = ["about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html", "software-developer-tanzania.html", "custom-software-development-tanzania.html"];
   for (const page of pages) {
     const html = read(page);
-    const block = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    const block = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/);
     assert.ok(block, page + " must include JSON-LD structured data");
     const data = JSON.parse(block[1]);
     assert.equal(data["@context"], "https://schema.org");
-    assert.ok(data["@graph"].some(item => ["WebPage", "AboutPage", "ContactPage"].includes(item["@type"])), page + " must describe the page");
+    assert.ok(data["@graph"].some(item => ["WebPage", "AboutPage", "ContactPage", "ProfilePage"].includes(item["@type"])), page + " must describe the page");
     const breadcrumb = data["@graph"].find(item => item["@type"] === "BreadcrumbList");
     assert.ok(breadcrumb, page + " must include breadcrumb structured data");
     assert.equal(breadcrumb.itemListElement.at(-1).item, html.match(/<link rel="canonical" href="([^"]+)"/)[1]);
+    if (page === "custom-software-development-tanzania.html") {
+      assert.ok(data["@graph"].some(item => item["@type"] === "Service"), "custom software page must describe its service");
+    }
+    if (page === "software-developer-tanzania.html") {
+      const profile = data["@graph"].find(item => item["@type"] === "ProfilePage");
+      assert.equal(profile.mainEntity.jobTitle, "Computer Science Undergraduate");
+      assert.ok(html.includes("trainee programmes where eligible"));
+      assert.ok(!html.includes("graduate trainee pathways"));
+    }
   }
 });
