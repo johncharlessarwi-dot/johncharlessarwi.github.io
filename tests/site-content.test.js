@@ -5,6 +5,13 @@ const path = require("node:path");
 
 const root = path.join(__dirname, "..");
 const read = file => fs.readFileSync(path.join(root, file), "utf8");
+const readJsonLd = (html, page) => {
+  const marker = '<script type="application/ld+json">';
+  const start = html.indexOf(marker);
+  const end = html.indexOf("</script>", start);
+  assert.ok(start >= 0 && end > start, page + " must include JSON-LD structured data");
+  return JSON.parse(html.slice(start + marker.length, end));
+};
 
 test("homepage navigation points to existing portfolio pages", () => {
   const html = read("index.html");
@@ -115,9 +122,7 @@ test("keyboard focus and mobile navigation controls have visible accessible targ
 
 test("homepage publishes valid person, organisation and website structured data", () => {
   const html = read("index.html");
-  const block = html.match(/<script type="application\/ld\+json">([\s\\S]*?)<\/script>/);
-  assert.ok(block, "homepage must include JSON-LD structured data");
-  const data = JSON.parse(block[1]);
+  const data = readJsonLd(html, "index.html");
   assert.equal(data["@context"], "https://schema.org");
   assert.ok(data["@graph"].some(item => item["@type"] === "Person" && item.name === "John Charles Sarwi"));
   assert.ok(data["@graph"].some(item => item["@type"] === "Organization" && item.name === "JOHN ONLINE SERVICES AND APPLICATIONS"));
@@ -165,9 +170,7 @@ test("secondary pages publish valid page and breadcrumb structured data", () => 
   const pages = ["about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html", "software-developer-tanzania.html", "custom-software-development-tanzania.html"];
   for (const page of pages) {
     const html = read(page);
-    const block = html.match(/<script type="application\/ld\+json">([\s\\S]*?)<\/script>/);
-    assert.ok(block, page + " must include JSON-LD structured data");
-    const data = JSON.parse(block[1]);
+    const data = readJsonLd(html, page);
     assert.equal(data["@context"], "https://schema.org");
     assert.ok(data["@graph"].some(item => ["WebPage", "AboutPage", "ContactPage", "ProfilePage"].includes(item["@type"])), page + " must describe the page");
     const breadcrumb = data["@graph"].find(item => item["@type"] === "BreadcrumbList");
