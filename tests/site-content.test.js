@@ -153,3 +153,9 @@ test("robots.txt allows public crawling and points to the portfolio sitemap", ()
   assert.ok(robots.includes("Allow: /"));
   assert.ok(robots.includes("Sitemap: https://john-charles-sarwi-portfolio.vercel.app/sitemap.xml"));
 });
+
+test("homepage prioritizes its profile image and preconnects the font asset origin", () => {
+  const html = read("index.html");
+  assert.ok(html.includes('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'));
+  assert.ok(html.includes('alt="John Charles Sarwi" width="76" height="76" fetchpriority="high" decoding="async"'));
+});
