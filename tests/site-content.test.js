@@ -218,3 +218,12 @@ test("career landing page targets John Sarwi, the business brand and all four ca
   assert.ok(html.includes("JOHN ONLINE SERVICES AND APPLICATIONS"));
   assert.ok(html.includes('name="twitter:image"'));
 });
+
+test("custom software page connects the business service to its founder profile and project evidence", () => {
+  const html = read("custom-software-development-tanzania.html");
+  assert.ok(html.includes("Built by a software developer in Tanzania"));
+  assert.ok(html.includes("./software-developer-tanzania.html"));
+  assert.ok(html.includes("./projects.html"));
+  assert.ok(html.includes("John Charles Sarwi"));
+  assert.ok(html.includes("Mwenge Catholic University (MWECAU)"));
+});
