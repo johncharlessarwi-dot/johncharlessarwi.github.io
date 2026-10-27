@@ -106,3 +106,23 @@ test("keyboard focus and mobile navigation controls have visible accessible targ
   assert.ok(css.includes("nav a{min-height:44px"));
   assert.ok(css.includes("#menu{min-width:44px;min-height:44px"));
 });
+
+
+test("homepage publishes valid person, organisation and website structured data", () => {
+  const html = read("index.html");
+  const block = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  assert.ok(block, "homepage must include JSON-LD structured data");
+  const data = JSON.parse(block[1]);
+  assert.equal(data["@context"], "https://schema.org");
+  assert.ok(data["@graph"].some(item => item["@type"] === "Person" && item.name === "John Charles Sarwi"));
+  assert.ok(data["@graph"].some(item => item["@type"] === "Organization" && item.name === "JOHN ONLINE SERVICES AND APPLICATIONS"));
+  assert.ok(data["@graph"].some(item => item["@type"] === "WebSite"));
+});
+
+test("homepage includes canonical, Open Graph image and Twitter sharing metadata", () => {
+  const html = read("index.html");
+  assert.ok(html.includes('<link rel="canonical" href="https://john-charles-sarwi-portfolio.vercel.app/">'));
+  assert.ok(html.includes('property="og:image"'));
+  assert.ok(html.includes('name="twitter:card"'));
+  assert.ok(html.includes('name="description"'));
+});
