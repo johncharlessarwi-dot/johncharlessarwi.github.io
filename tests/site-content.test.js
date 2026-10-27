@@ -181,7 +181,9 @@ test("secondary pages publish valid page and breadcrumb structured data", () => 
     }
     if (page === "software-developer-tanzania.html") {
       const profile = data["@graph"].find(item => item["@type"] === "ProfilePage");
-      assert.equal(profile.mainEntity.jobTitle, "Computer Science Undergraduate");
+      const profilePerson = data["@graph"].find(item => item["@type"] === "Person" && item["@id"] === profile.mainEntity["@id"]);
+      assert.ok(profilePerson, "profile page must reference a Person entity");
+      assert.equal(profilePerson.jobTitle, "Computer Science Undergraduate");
       assert.ok(html.includes("trainee programmes where eligible"));
       assert.ok(!html.includes("graduate trainee pathways"));
     }
