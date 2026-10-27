@@ -126,3 +126,27 @@ test("homepage includes canonical, Open Graph image and Twitter sharing metadata
   assert.ok(html.includes('name="twitter:card"'));
   assert.ok(html.includes('name="description"'));
 });
+
+
+test("every indexable portfolio page has a unique canonical and social preview metadata", () => {
+  const pages = ["index.html", "about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html"];
+  const canonicals = [];
+  for (const page of pages) {
+    const html = read(page);
+    const canonical = html.match(/<link rel="canonical" href="([^"]+)"/);
+    assert.ok(canonical, page + " must declare a canonical URL");
+    assert.ok(html.includes('property="og:title"'), page + " must declare an Open Graph title");
+    assert.ok(html.includes('property="og:description"'), page + " must declare an Open Graph description");
+    assert.ok(html.includes('property="og:image"'), page + " must declare an Open Graph image");
+    assert.ok(html.includes('name="twitter:card"'), page + " must declare a Twitter card");
+    canonicals.push(canonical[1]);
+  }
+  assert.equal(new Set(canonicals).size, pages.length, "canonical URLs must be unique per page");
+});
+
+test("robots.txt allows public crawling and points to the portfolio sitemap", () => {
+  const robots = read("robots.txt");
+  assert.ok(robots.includes("User-agent: *"));
+  assert.ok(robots.includes("Allow: /"));
+  assert.ok(robots.includes("Sitemap: https://john-charles-sarwi-portfolio.vercel.app/sitemap.xml"));
+});
