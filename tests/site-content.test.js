@@ -164,7 +164,7 @@ test("secondary pages publish valid page and breadcrumb structured data", () => 
   const pages = ["about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html"];
   for (const page of pages) {
     const html = read(page);
-    const block = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/);
+    const block = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
     assert.ok(block, page + " must include JSON-LD structured data");
     const data = JSON.parse(block[1]);
     assert.equal(data["@context"], "https://schema.org");
