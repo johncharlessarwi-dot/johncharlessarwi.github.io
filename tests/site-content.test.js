@@ -90,3 +90,19 @@ test("tablet navigation collapses before the desktop header becomes crowded", ()
   assert.ok(css.includes("@media(max-width:680px)"));
   assert.ok(css.includes("nav.open{display:flex}"));
 });
+
+
+test("mobile layout keeps the hero visual and form controls usable on narrow screens", () => {
+  const css = read("styles.css");
+  assert.ok(css.includes(".visual{width:100%;max-width:420px;height:340px"));
+  assert.ok(css.includes(".profile{width:min(300px,calc(100% - 28px))"));
+  assert.ok(css.includes(".form-grid input,.form-grid select,.form-grid textarea{font-size:16px"));
+  assert.ok(css.includes("#search{width:100%;font-size:16px"));
+});
+
+test("keyboard focus and mobile navigation controls have visible accessible targets", () => {
+  const css = read("styles.css");
+  assert.ok(css.includes(":focus-visible"));
+  assert.ok(css.includes("nav a{min-height:44px"));
+  assert.ok(css.includes("#menu{min-width:44px;min-height:44px"));
+});
