@@ -199,3 +199,20 @@ test("custom software landing page answers buyer questions with matching FAQ str
   }
   assert.ok(html.includes('name="twitter:image"'));
 });
+
+test("career landing page targets John Sarwi, the business brand and all four career search intents", () => {
+  const html = read("software-developer-tanzania.html");
+  const data = readJsonLd(html, "software-developer-tanzania.html");
+  const person = data["@graph"].find(item => item["@type"] === "Person");
+  const organisation = data["@graph"].find(item => item["@type"] === "Organization");
+  assert.equal(person.name, "John Charles Sarwi");
+  assert.equal(person.jobTitle, "Computer Science Undergraduate");
+  assert.equal(organisation.name, "JOHN ONLINE SERVICES AND APPLICATIONS");
+  assert.ok(html.includes("John Charles Sarwi"));
+  assert.ok(html.includes("Junior Software Developer in Tanzania"));
+  assert.ok(html.includes("Entry-Level Software Engineer in Tanzania"));
+  assert.ok(html.includes("Computer Science student portfolio"));
+  assert.ok(html.includes("Remote Junior Developer in Africa"));
+  assert.ok(html.includes("JOHN ONLINE SERVICES AND APPLICATIONS"));
+  assert.ok(html.includes('name="twitter:image"'));
+});
