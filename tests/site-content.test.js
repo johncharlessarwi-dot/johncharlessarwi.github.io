@@ -159,3 +159,18 @@ test("homepage prioritizes its profile image and preconnects the font asset orig
   assert.ok(html.includes('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'));
   assert.ok(html.includes('alt="John Charles Sarwi" width="76" height="76" fetchpriority="high" decoding="async"'));
 });
+
+test("secondary pages publish valid page and breadcrumb structured data", () => {
+  const pages = ["about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html"];
+  for (const page of pages) {
+    const html = read(page);
+    const block = html.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/);
+    assert.ok(block, page + " must include JSON-LD structured data");
+    const data = JSON.parse(block[1]);
+    assert.equal(data["@context"], "https://schema.org");
+    assert.ok(data["@graph"].some(item => ["WebPage", "AboutPage", "ContactPage"].includes(item["@type"])), page + " must describe the page");
+    const breadcrumb = data["@graph"].find(item => item["@type"] === "BreadcrumbList");
+    assert.ok(breadcrumb, page + " must include breadcrumb structured data");
+    assert.equal(breadcrumb.itemListElement.at(-1).item, html.match(/<link rel="canonical" href="([^"]+)"/)[1]);
+  }
+});
