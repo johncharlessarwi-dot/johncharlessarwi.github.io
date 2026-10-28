@@ -227,3 +227,9 @@ test("custom software page connects the business service to its founder profile 
   assert.ok(html.includes("John Charles Sarwi"));
   assert.ok(html.includes("Mwenge Catholic University (MWECAU)"));
 });
+
+test("homepage organization schema links to the verified Google Business Profile", () => {
+  const data = readJsonLd(read("index.html"), "index.html");
+  const organization = data["@graph"].find(item => item["@type"] === "Organization");
+  assert.ok(organization.sameAs.includes("https://www.google.com/maps/search/?api=1&query=John%20Online%20Services%20%26%20Applications&query_place_id=ChIJe70pvuPZORgRhiDtPHcePhY"));
+});
