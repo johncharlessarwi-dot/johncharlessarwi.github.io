@@ -55,3 +55,11 @@ test("about page canonical URL matches its structured data URL", () => {
 
   assert.equal(canonical, profile?.url);
 });
+
+test("about page exposes consistent author and Open Graph profile metadata", () => {
+  assert.match(aboutHtml, /<meta name="author" content="John Charles Sarwi">/);
+  assert.match(aboutHtml, /<meta property="og:site_name" content="John Charles Sarwi">/);
+  assert.match(aboutHtml, /<meta property="og:locale" content="en_TZ">/);
+  assert.match(aboutHtml, /<meta property="profile:first_name" content="John">/);
+  assert.match(aboutHtml, /<meta property="profile:last_name" content="Sarwi">/);
+});
