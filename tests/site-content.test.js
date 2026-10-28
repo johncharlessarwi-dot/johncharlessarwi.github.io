@@ -172,7 +172,10 @@ test("secondary pages publish valid page and breadcrumb structured data", () => 
     const html = read(page);
     const data = readJsonLd(html, page);
     assert.equal(data["@context"], "https://schema.org");
-    assert.ok(data["@graph"].some(item => ["WebPage", "AboutPage", "ContactPage", "ProfilePage"].includes(item["@type"])), page + " must describe the page");
+    assert.ok(data["@graph"].some(item => {
+      const types = Array.isArray(item["@type"]) ? item["@type"] : [item["@type"]];
+      return types.some(type => ["WebPage", "AboutPage", "ContactPage", "ProfilePage"].includes(type));
+    }), page + " must describe the page");
     const breadcrumb = data["@graph"].find(item => item["@type"] === "BreadcrumbList");
     assert.ok(breadcrumb, page + " must include breadcrumb structured data");
     assert.equal(breadcrumb.itemListElement.at(-1).item, html.match(/<link rel="canonical" href="([^"]+)"/)[1]);
