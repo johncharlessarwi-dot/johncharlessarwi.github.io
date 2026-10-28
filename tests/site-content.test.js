@@ -233,3 +233,14 @@ test("homepage organization schema links to the verified Google Business Profile
   const organization = data["@graph"].find(item => item["@type"] === "Organization");
   assert.ok(organization.sameAs.includes("https://www.google.com/maps/search/?api=1&query=John%20Online%20Services%20%26%20Applications&query_place_id=ChIJe70pvuPZORgRhiDtPHcePhY"));
 });
+
+test("custom software landing page shows selected project evidence with descriptive links", () => {
+  const html = read("custom-software-development-tanzania.html");
+  assert.ok(html.includes('aria-label="Selected software project examples"'));
+  assert.ok(html.includes("<h2>BizFlow AI</h2>"));
+  assert.ok(html.includes("<h2>WPMS — Pharmacy ERP</h2>"));
+  assert.ok(html.includes('href="https://bizflow-ai-xi.vercel.app/"'));
+  assert.ok(html.includes('href="https://wpms-ten.vercel.app/"'));
+  assert.ok(html.includes('rel="noopener noreferrer"'));
+  assert.ok(html.includes("./projects.html"));
+});
