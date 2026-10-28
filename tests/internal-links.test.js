@@ -40,14 +40,14 @@ test("all local HTML links point to existing portfolio pages and anchors", () =>
         continue;
       }
 
-      const url = new URL(href, \`https://portfolio.local/\${source}\`);
+      const url = new URL(href, "https://portfolio.local/" + source);
       if (url.origin !== "https://portfolio.local") continue;
 
       let pathname;
       try {
         pathname = decodeURIComponent(url.pathname);
       } catch {
-        brokenLinks.push(\`\${source}: invalid URL encoding in \${href}\`);
+        brokenLinks.push(source + ": invalid URL encoding in " + href);
         continue;
       }
 
@@ -56,7 +56,7 @@ test("all local HTML links point to existing portfolio pages and anchors", () =>
 
       const target = pathname.replace(/^\/+/, "");
       if (!pages.has(target)) {
-        brokenLinks.push(\`\${source}: missing page \${href}\`);
+        brokenLinks.push(source + ": missing page " + href);
         continue;
       }
 
@@ -64,7 +64,7 @@ test("all local HTML links point to existing portfolio pages and anchors", () =>
         url.hash &&
         !anchorsByPage.get(target).has(decodeURIComponent(url.hash.slice(1)))
       ) {
-        brokenLinks.push(\`\${source}: missing anchor \${href}\`);
+        brokenLinks.push(source + ": missing anchor " + href);
       }
     }
   }
@@ -72,7 +72,7 @@ test("all local HTML links point to existing portfolio pages and anchors", () =>
   assert.deepEqual(brokenLinks, [], brokenLinks.join("\n"));
 });
 
-test("core portfolio pages expose links to the main navigation destinations", () => {
+test("main navigation destinations are consistently linked", () => {
   const requiredDestinations = [
     "./index.html",
     "./about.html",
@@ -86,17 +86,21 @@ test("core portfolio pages expose links to the main navigation destinations", ()
     "about.html",
     "projects.html",
     "services.html",
-    "resume.html",
     "contact.html"
   ]) {
     const html = pages.get(page);
-    assert.ok(html, \`\${page} must exist\`);
+    assert.ok(html, page + " must exist");
 
     for (const destination of requiredDestinations) {
       assert.ok(
-        html.includes(\`href="\${destination}"\`),
-        \`\${page} should link to \${destination}\`
+        html.includes('href="' + destination + '"'),
+        page + " should link to " + destination
       );
     }
   }
+
+  assert.ok(
+    pages.get("resume.html").includes('href="./index.html#resume"'),
+    "resume page should link back to the portfolio"
+  );
 });
