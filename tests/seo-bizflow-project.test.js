@@ -10,7 +10,7 @@ const html = fs.readFileSync(
 
 function readJsonLd() {
   const match = html.match(
-    /<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/i
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/i
   );
   assert.ok(match, "bizflow-ai.html must include a JSON-LD script");
   return JSON.parse(match[1]);
