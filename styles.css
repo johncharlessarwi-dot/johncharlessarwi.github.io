@@ -177,3 +177,22 @@
 .footer-legal{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
 .footer-legal a{font-size:10px;color:var(--muted)}
 .footer-legal a:hover{color:var(--cyan)}
+
+
+/* Pricing page comparison table */
+.pricing-intro{display:flex;justify-content:space-between;align-items:end;gap:30px;margin:42px 0 28px;padding:28px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.pricing-intro>div{max-width:760px}
+.pricing-intro label,.pricing-table-section label{font:10px var(--mono);letter-spacing:.14em;color:var(--cyan)}
+.pricing-intro h2{margin:10px 0;font-size:clamp(24px,4vw,38px)}
+.pricing-intro p{margin:0;color:var(--muted);font-size:12px;line-height:1.9}
+.pricing-table-section{margin:28px 0 42px}
+.pricing-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+.pricing-table{width:100%;min-width:760px;border-collapse:collapse;text-align:left}
+.pricing-table th{padding:17px 18px;background:#142237;color:var(--cyan);font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.pricing-table td{padding:19px 18px;border-top:1px solid var(--line);color:var(--muted);font-size:11px;line-height:1.8;vertical-align:top}
+.pricing-table td:first-child{color:var(--text);min-width:180px}
+.pricing-table td strong{color:var(--cyan);font-size:12px}
+.pricing-table tbody tr:hover{background:#ffffff08}
+.pricing-note{margin:14px 4px;color:var(--muted);font-size:10px;line-height:1.8}
+.pricing-support{margin-top:34px}
+@media(max-width:700px){.pricing-intro{align-items:flex-start;flex-direction:column;padding:22px}.pricing-table td,.pricing-table th{padding:15px 13px}}
