@@ -1,8 +1,22 @@
 (function () {
   "use strict";
 
-  // Queue events for Google Tag Manager (or another dataLayer-compatible tag).
-  // No analytics vendor, measurement ID, cookie, or external request is added here.
+  // Vercel Web Analytics for this static HTML site.
+  // The project must also have Web Analytics enabled in the Vercel dashboard.
+  // The queue is created before the deferred script loads so early page views are retained.
+  window.va = window.va || function () {
+    (window.vaq = window.vaq || []).push(arguments);
+  };
+
+  if (!document.querySelector("script[data-vercel-analytics]")) {
+    var analyticsScript = document.createElement("script");
+    analyticsScript.defer = true;
+    analyticsScript.src = "/_vercel/insights/script.js";
+    analyticsScript.dataset.vercelAnalytics = "true";
+    document.head.appendChild(analyticsScript);
+  }
+
+  // Keep the existing dataLayer events available for a future tag-manager integration.
   window.dataLayer = window.dataLayer || [];
 
   function track(eventName, link) {
@@ -14,11 +28,14 @@
   }
 
   document.addEventListener("click", function (event) {
-    const link = event.target.closest("a[href]");
+    var target = event.target;
+    var link = target && typeof target.closest === "function"
+      ? target.closest("a[href]")
+      : null;
     if (!link) return;
 
-    const href = link.getAttribute("href") || "";
-    if (/^(https?:\/\/)?(www\.)?wa\.me\//i.test(href) || /api\.whatsapp\.com/i.test(href)) {
+    var href = link.getAttribute("href") || "";
+    if (/^(https?:\\/\\/)?(www\\.)?wa\\.me\\//i.test(href) || /api\\.whatsapp\\.com/i.test(href)) {
       track("jos_whatsapp_click", link);
     } else if (/^mailto:/i.test(href)) {
       track("jos_email_click", link);
