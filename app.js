@@ -153,4 +153,9 @@ function scheduleSecondaryLoads(){
 }
 loadProjects();
 scheduleSecondaryLoads();
-setInterval(loadEvents,300000);setInterval(loadDeployments,300000);
+const FEED_REFRESH_INTERVAL=300000;
+setInterval(()=>{if(document.visibilityState==="visible")loadEvents()},FEED_REFRESH_INTERVAL);
+setInterval(()=>{if(document.visibilityState==="visible")loadDeployments()},FEED_REFRESH_INTERVAL);
+document.addEventListener("visibilitychange",()=>{
+ if(document.visibilityState==="visible"){loadEvents();loadDeployments()}
+});
