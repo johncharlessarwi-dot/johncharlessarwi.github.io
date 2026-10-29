@@ -300,7 +300,7 @@ test("homepage links to three maintained official destinations and real live pro
   const person = graph.find(item => item["@type"] === "Person");
   const organization = graph.find(item => item["@type"] === "Organization");
   assert.ok(person.sameAs.includes("https://github.com/johncharlessarwi-dot"));
-  assert.ok(person.sameAs.includes("https://john-charles-sarwi-portfolio.vercel.app/"));
+  assert.equal(person.url, "https://john-charles-sarwi-portfolio.vercel.app/", "Person entity must expose the canonical portfolio URL");
   assert.ok(organization.sameAs.some(url => url.includes("google.com/maps/search/")));
   for (const url of ["https://john-charles-sarwi-portfolio.vercel.app/", "https://github.com/johncharlessarwi-dot", "https://www.google.com/maps/search/?api=1&query=John%20Online%20Services%20%26%20Applications&query_place_id=ChIJe70pvuPZORgRhiDtPHcePhY", "https://bizflow-ai-xi.vercel.app/", "https://wpms-ten.vercel.app/"]) {
     assert.ok(html.includes(url), "homepage must link to verified destination: " + url);
