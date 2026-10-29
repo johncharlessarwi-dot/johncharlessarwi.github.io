@@ -221,3 +221,19 @@
   display:inline-flex;
   align-items:center;
 }
+
+
+/* Keep the initial project catalogue light without hiding any repositories. */
+.projects-more{
+  display:block;
+  margin:22px auto 0;
+  min-height:44px;
+  padding:12px 20px;
+  border:1px solid var(--line);
+  background:#55e6e00d;
+  color:var(--cyan);
+  font:10px var(--mono);
+  cursor:pointer;
+}
+.projects-more:hover{border-color:#55e6e088;background:#55e6e018}
+.projects-more[hidden]{display:none}
