@@ -133,3 +133,18 @@
   #filters button{min-height:40px}
   .cardlinks a,.cardlinks button{min-height:40px;display:inline-flex;align-items:center}
 }
+
+
+/* Homepage FAQ block */
+.faq-section{padding-top:82px;padding-bottom:88px}
+.faq-list{max-width:900px;border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line);background:linear-gradient(90deg,#101d2d66,transparent)}
+.faq-item summary{position:relative;list-style:none;cursor:pointer;padding:22px 52px 22px 18px;font-size:13px;font-weight:700;line-height:1.6;color:#e8f0fc}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:after{content:"+";position:absolute;right:18px;top:50%;transform:translateY(-50%);font:20px var(--mono);color:var(--cyan)}
+.faq-item[open] summary:after{content:"−"}
+.faq-item summary:hover{color:var(--cyan)}
+.faq-item p{max-width:790px;margin:0;padding:0 52px 22px 18px;color:var(--muted);font-size:11px;line-height:1.95}
+.faq-contact{margin:24px 0 0;font-size:11px;color:var(--muted)}
+.faq-contact a{color:var(--cyan)}
+@media(max-width:580px){.faq-section{padding-top:65px;padding-bottom:65px}.faq-item summary{padding:18px 42px 18px 12px;font-size:12px}.faq-item summary:after{right:12px}.faq-item p{padding:0 14px 18px;font-size:11px}}
