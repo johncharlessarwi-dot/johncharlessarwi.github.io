@@ -117,6 +117,7 @@
 @media(max-width:680px){
   nav a{min-height:44px;display:flex;align-items:center}
   #menu{min-width:44px;min-height:44px}
+  #filters button,.cardlinks a,.cardlinks button{min-height:44px}
 }
 @media(max-width:580px){
   .visual{width:100%;max-width:420px;height:340px;margin:0 auto;transform:none}
@@ -130,8 +131,8 @@
   #search{width:100%;font-size:16px;min-height:44px}
   .form-grid input,.form-grid select,.form-grid textarea{font-size:16px;min-height:44px}
   .form-grid textarea{min-height:130px}
-  #filters button{min-height:40px}
-  .cardlinks a,.cardlinks button{min-height:40px;display:inline-flex;align-items:center}
+  #filters button{min-height:44px}
+  .cardlinks a,.cardlinks button{min-height:44px;display:inline-flex;align-items:center}
 }
 
 
