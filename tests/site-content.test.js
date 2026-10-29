@@ -335,3 +335,18 @@ test("legal pages exist with metadata and both policies are linked from site foo
     assert.ok(html.includes('href="./privacy.html"'), page + " must link to Privacy Policy");
   }
 });
+
+
+test("pricing page publishes a budget comparison table and is discoverable", () => {
+  const html = read("pricing.html");
+  assert.match(html, /<meta name="description" content="[^"]{110,160}">/);
+  assert.ok(html.includes("Last updated: 29 October 2026"));
+  assert.ok(html.includes("© 2026 JOHN ONLINE SERVICES AND APPLICATIONS"));
+  assert.ok(html.includes("<table class=\"pricing-table\">"));
+  for (const band of ["Below TSh 300,000", "TSh 300,000 – 700,000", "TSh 700,000 – 1,500,000", "TSh 1,500,000 – 3,000,000", "Above TSh 3,000,000"]) {
+    assert.ok(html.includes(band), "pricing guide must publish budget band: " + band);
+  }
+  assert.ok(html.includes("not fixed package prices or a binding quote"));
+  assert.ok(read("sitemap.xml").includes("https://john-charles-sarwi-portfolio.vercel.app/pricing.html"));
+  assert.ok(read("index.html").includes('href="./pricing.html"'));
+});
