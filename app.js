@@ -155,8 +155,12 @@ function scheduleSecondaryLoads(){
 loadProjects();
 scheduleSecondaryLoads();
 const FEED_REFRESH_INTERVAL=300000;
-setInterval(()=>{if(document.visibilityState==="visible")loadEvents()},FEED_REFRESH_INTERVAL);
-setInterval(()=>{if(document.visibilityState==="visible")loadDeployments()},FEED_REFRESH_INTERVAL);
+function refreshSecondaryFeeds(){
+ if(document.visibilityState!=="visible")return;
+ loadEvents();
+ loadDeployments();
+}
+setInterval(refreshSecondaryFeeds,FEED_REFRESH_INTERVAL);
 document.addEventListener("visibilitychange",()=>{
- if(document.visibilityState==="visible"){loadEvents();loadDeployments()}
+ if(document.visibilityState==="visible")refreshSecondaryFeeds();
 });
