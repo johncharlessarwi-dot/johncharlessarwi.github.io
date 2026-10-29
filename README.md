@@ -27,6 +27,18 @@ The portfolio serves two audiences:
 
 HTML, CSS, vanilla JavaScript, GitHub REST API, Vercel Node.js Functions, Google Apps Script, and Gmail.
 
+## Featured public repositories
+
+These repositories provide publicly accessible source-code examples from my software work:
+
+- [SafeNet — RADIUS and network access management](https://github.com/johncharlessarwi-dot/safe-net)
+- [Campus Connect — university information platform](https://github.com/johncharlessarwi-dot/campusconnectapp)
+- [SmartVote Platform — digital election workflows](https://github.com/johncharlessarwi-dot/smartvote-platform)
+- [PHARMAFLOW — pharmacy management system](https://github.com/johncharlessarwi-dot/PHARMACEUTICAL-MANAGEMENT-SYSYTEM)
+- [MWECAU DigiVote — Laravel-based voting platform](https://github.com/johncharlessarwi-dot/mwecau_digivote_laravel)
+
+For current live products, selected case studies and project enquiries, visit the [official portfolio](https://john-charles-sarwi-portfolio.vercel.app/).
+
 ## Run locally
 
 Open `index.html` to inspect the static interface. Vercel serverless endpoints under `/api` require Vercel environment variables and are not provided by opening the HTML file directly.
