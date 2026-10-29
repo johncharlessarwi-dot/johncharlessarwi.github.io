@@ -197,3 +197,27 @@
 .pricing-note{margin:14px 4px;color:var(--muted);font-size:10px;line-height:1.8}
 .pricing-support{margin-top:34px}
 @media(max-width:700px){.pricing-intro{align-items:flex-start;flex-direction:column;padding:22px}.pricing-table td,.pricing-table th{padding:15px 13px}}
+
+
+/* Complete the 44px minimum touch area for remaining interactive controls. */
+.case-study-head button{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  min-height:44px;
+}
+.page-links a,
+.site-footer a,
+.footer-legal a,
+.updates-toolbar a,
+.deploy-meta a,
+.presence-products a,
+.official-presence .path-card>a,
+.resume-links a,
+.path-actions a,
+.foot>a,
+.contactmeta a{
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+}
