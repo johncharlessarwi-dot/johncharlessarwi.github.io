@@ -1,3 +1,5 @@
+const { randomBytes } = require("node:crypto");
+
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "POST") {
@@ -12,14 +14,19 @@ module.exports = async function handler(req, res) {
   const service = clean(body.service, 100), budget = clean(body.budget, 100);
   const message = clean(body.message, 4000), timeline = clean(body.timeline, 100);
   const contactPreference = clean(body.contactPreference, 40);
-  if (!name || !email || !service || message.length < 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+  if (!name || !email || !service || message.length < 10 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))
     return res.status(400).json({ error: "Please provide a valid name, email, service and project description." });
-  if (!process.env.GOOGLE_APPS_SCRIPT_URL)
-    return res.status(503).json({ error: "Order email is not configured yet. Please email johncharlessarwi@gmail.com directly." });
-  const orderId = "JOS-" + new Date().toISOString().slice(0,10).replace(/-/g,"") + "-" + Math.random().toString(36).slice(2,7).toUpperCase();
-  const payload = { secret: process.env.ORDER_WEBHOOK_SECRET || "", orderId, name, email, phone, company, service, budget, timeline, contactPreference, message, submittedAt: new Date().toISOString() };
+
+  const webhookUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+  const webhookSecret = process.env.ORDER_WEBHOOK_SECRET;
+  if (!webhookUrl || !webhookSecret) {
+    return res.status(503).json({ error: "Order email is not fully configured yet. Please email johncharlessarwi@gmail.com directly." });
+  }
+
+  const orderId = "JOS-" + new Date().toISOString().slice(0,10).replace(/-/g,"") + "-" + randomBytes(4).toString("hex").slice(0,8).toUpperCase();
+  const payload = { secret: webhookSecret, orderId, name, email, phone, company, service, budget, timeline, contactPreference, message, submittedAt: new Date().toISOString() };
   try {
-    const response = await fetch(process.env.GOOGLE_APPS_SCRIPT_URL, {
+    const response = await fetch(webhookUrl, {
       method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload), redirect: "follow"
     });
