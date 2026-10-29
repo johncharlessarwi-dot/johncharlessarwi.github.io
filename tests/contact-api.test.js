@@ -88,7 +88,7 @@ test("reports missing webhook secret instead of sending unsigned orders", async 
   }
 });
 
-test("returns an order reference only when Apps Script accepts the order", async () => {
+test("returns a cryptographically random order reference only when Apps Script accepts the order", async () => {
   const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
   const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
   const originalFetch = global.fetch;
@@ -105,7 +105,7 @@ test("returns an order reference only when Apps Script accepts the order", async
     const res = await callHandler(validRequest());
     assert.equal(res.statusCode, 200);
     assert.equal(res.body.ok, true);
-    assert.match(res.body.orderId, /^JOS-\\d{8}-[A-F0-9]{8}$/);
+    assert.match(res.body.orderId, /^JOS-\d{8}-[A-F0-9]{8}$/);
     assert.equal(forwarded.url, "https://script.example/exec");
     assert.equal(forwarded.options.method, "POST");
     assert.equal(forwarded.options.redirect, "follow");
