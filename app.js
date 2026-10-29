@@ -16,7 +16,7 @@ const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"
 async function api(path){const r=await fetch(API+path,{headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw Error("GitHub "+r.status);return r.json()}
 function category(r){const s=(r.name+" "+(r.description||"")).toLowerCase();return /ai|agent|assistant|automation|bot/.test(s)?"ai":/system|management|erp|pharmacy|agrovet|microfinance|attendance|network/.test(s)?"systems":"web"}
 function renderProjects(){
- const shown=projects.filter(p=>(filter==="all"||p.category===filter)&&(p.title+" "+p.description+" "+p.tags.join(" ")).toLowerCase().includes(query));
+ const shown=projects.filter(p=>(filter==="all"||p.category===filter)&&p.searchText.includes(query));
  const visible=showAllProjects?shown:shown.slice(0,INITIAL_PROJECT_LIMIT);
  $("count").textContent="SHOWING "+shown.length+" / "+projects.length+" PROJECTS";
  $("projects").innerHTML=visible.length?visible.map(p=>'<article class="card"><div class="cardtop"><span>'+({web:"WEB APPLICATION",ai:"AI & AUTOMATION",systems:"BUSINESS SYSTEM"}[p.category])+'</span><span>★ '+(p.stars||0)+'</span></div><h3>'+safe(p.title)+'</h3><p>'+safe(p.description||"A public software project by John Charles Sarwi. Explore the source for more details.")+'</p><div class="cardtags">'+p.tags.slice(0,3).map(t=>"<span>"+safe(t)+"</span>").join("")+'</div><div class="cardlinks"><button class="case-study-trigger" type="button" data-case-study="'+safe(p.name)+'">Case study ↗</button>'+(p.url?'<a href="'+safe(p.url)+'" target="_blank" rel="noreferrer">Source code ↗</a>':'<span>Private source</span>')+(p.live?'<a href="'+safe(p.live)+'" target="_blank" rel="noreferrer">Live preview ↗</a>':"")+'</div></article>').join(""):'<div class="empty">No projects match your search.</div>';
@@ -35,7 +35,7 @@ async function loadProjects(){
   const top=featured.map(p=>{const r=map.get(p.name.toLowerCase());return {...p,url:r?.html_url||null,stars:r?.stargazers_count||0,updated_at:r?.updated_at||null}});
   const names=new Set(featured.map(p=>p.name.toLowerCase()));
   const rest=repos.filter(r=>!names.has(r.name.toLowerCase())).map(r=>({name:r.name,title:r.name.replace(/[-_]/g," ").replace(/\b\w/g,c=>c.toUpperCase()),category:category(r),description:r.description||"A public repository by John Charles Sarwi. Explore the source for details.",url:r.html_url,stars:r.stargazers_count,updated_at:r.updated_at,tags:[r.language||"Software",r.fork?"Fork":"GitHub"]}));
-  projects=[...top,...rest];renderProjects();
+  projects=[...top,...rest].map(p=>({...p,searchText:[p.title,p.description,...(p.tags||[])].join(" ").toLowerCase()}));renderProjects();
  }catch(e){$("sync").textContent="GITHUB DATA TEMPORARILY UNAVAILABLE";$("projects").innerHTML='<div class="empty">GitHub is temporarily unavailable. <a href="https://github.com/'+USER+'?tab=repositories">Browse repositories directly ↗</a></div>'}
 }
 async function loadEvents(){
@@ -132,7 +132,8 @@ $("projects").addEventListener("click",e=>{
 $("case-study-close").addEventListener("click",()=>caseDialog.close());
 caseDialog.addEventListener("click",e=>{if(e.target===caseDialog)caseDialog.close()});
 $("filters").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;showAllProjects=false;document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("active",x===b));renderProjects()});
-$("search").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();showAllProjects=false;renderProjects()});
+let projectSearchFrame=0;
+$("search").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();showAllProjects=false;if(projectSearchFrame)cancelAnimationFrame(projectSearchFrame);projectSearchFrame=requestAnimationFrame(()=>{projectSearchFrame=0;renderProjects()})});
 $("projects-more")?.addEventListener("click",()=>{showAllProjects=!showAllProjects;renderProjects()});
 $("refresh-deployments")?.addEventListener("click",loadDeployments);
 const projectForm=$("project-form");
