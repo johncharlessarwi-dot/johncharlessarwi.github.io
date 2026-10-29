@@ -270,3 +270,14 @@ test("homepage displays six buyer FAQs and publishes matching FAQPage structured
   assert.ok(html.includes('id="faq"'));
   assert.ok(html.includes('class="faq-item"'));
 });
+
+
+test("homepage repeats the intended Tanzanian business buyer audience and concrete use cases", () => {
+  const html = read("index.html");
+  assert.match(html, /entrepreneurs, startups, and small and growing businesses in Tanzania/i);
+  assert.match(html, /Tanzanian entrepreneurs, startup founders, and small and medium-sized business owners/i);
+  assert.match(html, /id="business-use-cases"/);
+  for (const audience of ["Entrepreneurs & local service businesses", "Startups & growing teams", "Small & medium-sized businesses"]) {
+    assert.ok(html.includes(audience), "homepage must include buyer use case: " + audience);
+  }
+});
