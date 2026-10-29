@@ -52,7 +52,9 @@ async function loadProjectUpdates(){
  const box=$("project-updates"),label=$("project-updates-status");
  if(!box||!label)return;
  label.textContent="CHECKING PROJECT REPOSITORIES…";
- const targets=featured.slice(0,8);
+ const featuredNames=new Set(featured.map(p=>p.name.toLowerCase()));
+ const targets=projects.filter(p=>p.url&&featuredNames.has(p.name.toLowerCase())).slice(0,8);
+ if(!targets.length){label.textContent="NO PUBLIC FEATURED REPOSITORY UPDATES AVAILABLE";box.innerHTML='<p class="empty">Latest commit details will appear when a featured repository is publicly accessible.</p>';return;}
  const results=await Promise.allSettled(targets.map(async p=>{
   const r=await api("/repos/"+USER+"/"+encodeURIComponent(p.name)+"/commits?per_page=1");
   if(!r.length)return null;
