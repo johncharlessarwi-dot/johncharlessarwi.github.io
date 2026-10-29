@@ -9,15 +9,23 @@ const featured=[
 {name:"campusconnectapp",title:"Campus Connect",category:"web",description:"A campus-focused platform to help students discover useful university information.",tags:["Web app","Student tech"]},
 {name:"agentic-tourism-platform",title:"Agentic Tourism Platform",category:"ai",description:"AI-enabled tourism experiences and intelligent travel workflows.",tags:["AI","Tourism","Automation"]}
 ];
-let projects=[],filter="all",query="";
+let projects=[],filter="all",query="",showAllProjects=false;
+const INITIAL_PROJECT_LIMIT=12;
 const $=id=>document.getElementById(id);
 const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 async function api(path){const r=await fetch(API+path,{headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw Error("GitHub "+r.status);return r.json()}
 function category(r){const s=(r.name+" "+(r.description||"")).toLowerCase();return /ai|agent|assistant|automation|bot/.test(s)?"ai":/system|management|erp|pharmacy|agrovet|microfinance|attendance|network/.test(s)?"systems":"web"}
 function renderProjects(){
  const shown=projects.filter(p=>(filter==="all"||p.category===filter)&&(p.title+" "+p.description+" "+p.tags.join(" ")).toLowerCase().includes(query));
+ const visible=showAllProjects?shown:shown.slice(0,INITIAL_PROJECT_LIMIT);
  $("count").textContent="SHOWING "+shown.length+" / "+projects.length+" PROJECTS";
- $("projects").innerHTML=shown.length?shown.map(p=>'<article class="card"><div class="cardtop"><span>'+({web:"WEB APPLICATION",ai:"AI & AUTOMATION",systems:"BUSINESS SYSTEM"}[p.category])+'</span><span>★ '+(p.stars||0)+'</span></div><h3>'+safe(p.title)+'</h3><p>'+safe(p.description||"A public software project by John Charles Sarwi. Explore the source for more details.")+'</p><div class="cardtags">'+p.tags.slice(0,3).map(t=>"<span>"+safe(t)+"</span>").join("")+'</div><div class="cardlinks"><button class="case-study-trigger" type="button" data-case-study="'+safe(p.name)+'">Case study ↗</button>'+(p.url?'<a href="'+safe(p.url)+'" target="_blank" rel="noreferrer">Source code ↗</a>':'<span>Private source</span>')+(p.live?'<a href="'+safe(p.live)+'" target="_blank" rel="noreferrer">Live preview ↗</a>':"")+'</div></article>').join(""):'<div class="empty">No projects match your search.</div>';
+ $("projects").innerHTML=visible.length?visible.map(p=>'<article class="card"><div class="cardtop"><span>'+({web:"WEB APPLICATION",ai:"AI & AUTOMATION",systems:"BUSINESS SYSTEM"}[p.category])+'</span><span>★ '+(p.stars||0)+'</span></div><h3>'+safe(p.title)+'</h3><p>'+safe(p.description||"A public software project by John Charles Sarwi. Explore the source for more details.")+'</p><div class="cardtags">'+p.tags.slice(0,3).map(t=>"<span>"+safe(t)+"</span>").join("")+'</div><div class="cardlinks"><button class="case-study-trigger" type="button" data-case-study="'+safe(p.name)+'">Case study ↗</button>'+(p.url?'<a href="'+safe(p.url)+'" target="_blank" rel="noreferrer">Source code ↗</a>':'<span>Private source</span>')+(p.live?'<a href="'+safe(p.live)+'" target="_blank" rel="noreferrer">Live preview ↗</a>':"")+'</div></article>').join(""):'<div class="empty">No projects match your search.</div>';
+ const more=$("projects-more");
+ if(more){
+  more.hidden=shown.length<=INITIAL_PROJECT_LIMIT;
+  more.textContent=showAllProjects?"Show fewer projects":"Show all "+shown.length+" projects";
+  more.setAttribute("aria-expanded",String(showAllProjects));
+ }
 }
 async function loadProjects(){
  try{
@@ -123,8 +131,9 @@ $("projects").addEventListener("click",e=>{
 });
 $("case-study-close").addEventListener("click",()=>caseDialog.close());
 caseDialog.addEventListener("click",e=>{if(e.target===caseDialog)caseDialog.close()});
-$("filters").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("active",x===b));renderProjects()});
-$("search").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();renderProjects()});
+$("filters").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(!b)return;filter=b.dataset.filter;showAllProjects=false;document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("active",x===b));renderProjects()});
+$("search").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();showAllProjects=false;renderProjects()});
+$("projects-more")?.addEventListener("click",()=>{showAllProjects=!showAllProjects;renderProjects()});
 $("refresh-deployments")?.addEventListener("click",loadDeployments);
 const projectForm=$("project-form");
 if(projectForm){
