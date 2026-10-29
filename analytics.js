@@ -1,21 +1,10 @@
 (function () {
   "use strict";
 
-  // Vercel Web Analytics for this static HTML site.
-  // Enable Web Analytics in the Vercel dashboard to activate the endpoint.
-  // Queue events before the deferred script loads so the first page view is retained.
-  window.va = window.va || function () {
-    (window.vaq = window.vaq || []).push(arguments);
-  };
-
-  if (!document.querySelector("script[data-vercel-analytics]")) {
-    var analyticsScript = document.createElement("script");
-    analyticsScript.defer = true;
-    analyticsScript.src = "/_vercel/insights/script.js";
-    analyticsScript.dataset.vercelAnalytics = "true";
-    document.head.appendChild(analyticsScript);
-  }
-
+  // Vercel Web Analytics is not enabled for this project yet.
+  // Do not request /_vercel/insights/script.js until the dashboard activates it:
+  // the endpoint currently returns 404 and creates an avoidable browser error.
+  // Re-enable the loader after the endpoint returns HTTP 200.
   // Preserve the existing interaction queue for a future tag-manager integration.
   window.dataLayer = window.dataLayer || [];
 
