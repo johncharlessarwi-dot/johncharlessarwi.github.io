@@ -292,3 +292,18 @@ test("all canonical content pages publish concise 110-160 character descriptions
     assert.ok(match[1].length >= 110 && match[1].length <= 160, page + " description must be 110-160 characters; got " + match[1].length);
   }
 });
+
+
+test("homepage links to three maintained official destinations and real live products", () => {
+  const html = read("index.html");
+  const graph = readJsonLd(html, "index.html")["@graph"];
+  const person = graph.find(item => item["@type"] === "Person");
+  const organization = graph.find(item => item["@type"] === "Organization");
+  assert.ok(person.sameAs.includes("https://github.com/johncharlessarwi-dot"));
+  assert.ok(person.sameAs.includes("https://john-charles-sarwi-portfolio.vercel.app/"));
+  assert.ok(organization.sameAs.some(url => url.includes("google.com/maps/search/")));
+  for (const url of ["https://john-charles-sarwi-portfolio.vercel.app/", "https://github.com/johncharlessarwi-dot", "https://www.google.com/maps/search/?api=1&query=John%20Online%20Services%20%26%20Applications&query_place_id=ChIJe70pvuPZORgRhiDtPHcePhY", "https://bizflow-ai-xi.vercel.app/", "https://wpms-ten.vercel.app/"]) {
+    assert.ok(html.includes(url), "homepage must link to verified destination: " + url);
+  }
+  assert.ok(html.includes('id="official-presence"'));
+});
