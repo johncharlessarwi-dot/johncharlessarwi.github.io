@@ -148,3 +148,10 @@
 .faq-contact{margin:24px 0 0;font-size:11px;color:var(--muted)}
 .faq-contact a{color:var(--cyan)}
 @media(max-width:580px){.faq-section{padding-top:65px;padding-bottom:65px}.faq-item summary{padding:18px 42px 18px 12px;font-size:12px}.faq-item summary:after{right:12px}.faq-item p{padding:0 14px 18px;font-size:11px}}
+
+
+/* Business audience use-case section */
+.buyer-use-cases{padding-top:70px;padding-bottom:70px}
+.buyer-use-cases .path-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.buyer-use-cases .path-card{min-width:0}
+@media(max-width:850px){.buyer-use-cases .path-grid{grid-template-columns:1fr}}
