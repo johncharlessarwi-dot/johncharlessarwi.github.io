@@ -247,3 +247,26 @@ test("custom software landing page shows selected project evidence with descript
   assert.ok(html.includes('rel="noopener noreferrer"'));
   assert.ok(html.includes("./projects.html"));
 });
+
+
+test("homepage displays six buyer FAQs and publishes matching FAQPage structured data", () => {
+  const html = read("index.html");
+  const data = readJsonLd(html, "index.html");
+  const faqPages = data["@graph"].filter(item => item["@type"] === "FAQPage");
+  assert.equal(faqPages.length, 1, "homepage must publish one FAQPage entity");
+  assert.equal(faqPages[0].url, "https://john-charles-sarwi-portfolio.vercel.app/#faq");
+  assert.equal(faqPages[0].mainEntity.length, 6, "homepage FAQ must contain six questions");
+  for (const question of faqPages[0].mainEntity) {
+    assert.equal(question["@type"], "Question");
+    assert.ok(question.name.length > 10);
+    assert.equal(question.acceptedAnswer["@type"], "Answer");
+    assert.ok(question.acceptedAnswer.text.length > 40);
+    assert.ok(html.includes(question.name), "visible FAQ must include: " + question.name);
+    assert.ok(html.includes(question.acceptedAnswer.text), "visible FAQ answer must match structured data: " + question.name);
+  }
+  for (const topic of ["Who are these services for?", "How much does a website or custom system cost?", "Can you integrate existing tools, APIs, databases, or payment services?", "Should I choose custom software or an off-the-shelf alternative?", "How does onboarding and project delivery work?"]) {
+    assert.ok(faqPages[0].mainEntity.some(question => question.name === topic), "FAQ must cover: " + topic);
+  }
+  assert.ok(html.includes('id="faq"'));
+  assert.ok(html.includes('class="faq-item"'));
+});
