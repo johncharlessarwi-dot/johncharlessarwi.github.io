@@ -166,3 +166,8 @@
 .presence-products span{font:10px var(--mono);color:var(--muted);letter-spacing:.12em}
 .presence-products a{font-size:11px;color:var(--cyan)}
 @media(max-width:850px){.official-presence .path-grid{grid-template-columns:1fr}}
+
+
+/* Publication freshness metadata */
+.last-updated{display:block;color:var(--muted);font-size:10px;line-height:1.6;letter-spacing:.02em}
+.site-footer .last-updated{flex-basis:100%}
