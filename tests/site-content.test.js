@@ -281,3 +281,14 @@ test("homepage repeats the intended Tanzanian business buyer audience and concre
     assert.ok(html.includes(audience), "homepage must include buyer use case: " + audience);
   }
 });
+
+
+test("all canonical content pages publish concise 110-160 character descriptions", () => {
+  const pages = ["index.html", "about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html", "software-developer-tanzania.html", "custom-software-development-tanzania.html"];
+  for (const page of pages) {
+    const html = read(page);
+    const match = html.match(/<meta name="description" content="([^"]+)">/i);
+    assert.ok(match, page + " must have a description meta tag");
+    assert.ok(match[1].length >= 110 && match[1].length <= 160, page + " description must be 110-160 characters; got " + match[1].length);
+  }
+});
