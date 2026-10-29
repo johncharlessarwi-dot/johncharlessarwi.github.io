@@ -77,6 +77,11 @@ async function loadDeployments(){
   }
   if(!r.ok)throw Error("Deployment feed unavailable");
   const data=await r.json(),items=data.deployments||[];
+  if(data.unavailable){
+   status.textContent="DELIVERY ACTIVITY UNAVAILABLE";
+   list.innerHTML='<div class="empty">GitHub does not currently provide public workflow-run access for this feed. You can still inspect the source repository directly.</div>';
+   return;
+  }
   status.textContent="LIVE GITHUB ACTIONS · "+items.length+" RECENT WORKFLOW RUNS";
   list.innerHTML=items.length?items.map(d=>{
    const state=String(d.state||"unknown").toLowerCase(),name=d.projectName||d.project||"Portfolio workflow";
