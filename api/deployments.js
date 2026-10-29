@@ -10,8 +10,14 @@ module.exports = async function handler(req, res) {
       headers: { Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" }
     });
     if (!response.ok) {
-      console.error("GitHub Actions feed returned", response.status);
-      return res.status(502).json({ error: "Could not retrieve public delivery activity." });
+      // GitHub may deny unauthenticated Actions-run access (HTTP 403).
+      // Treat this optional feed as unavailable rather than failing the page request.
+      return res.status(200).json({
+        deployments: [],
+        source: "github-actions",
+        count: 0,
+        unavailable: true
+      });
     }
     const payload = await response.json();
     const deployments = (payload.workflow_runs || []).map(run => ({
