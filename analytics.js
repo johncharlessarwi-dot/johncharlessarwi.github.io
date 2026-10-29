@@ -2,8 +2,8 @@
   "use strict";
 
   // Vercel Web Analytics for this static HTML site.
-  // The project must also have Web Analytics enabled in the Vercel dashboard.
-  // The queue is created before the deferred script loads so early page views are retained.
+  // Enable Web Analytics in the Vercel dashboard to activate the endpoint.
+  // Queue events before the deferred script loads so the first page view is retained.
   window.va = window.va || function () {
     (window.vaq = window.vaq || []).push(arguments);
   };
@@ -16,7 +16,7 @@
     document.head.appendChild(analyticsScript);
   }
 
-  // Keep the existing dataLayer events available for a future tag-manager integration.
+  // Preserve the existing interaction queue for a future tag-manager integration.
   window.dataLayer = window.dataLayer || [];
 
   function track(eventName, link) {
@@ -35,7 +35,7 @@
     if (!link) return;
 
     var href = link.getAttribute("href") || "";
-    if (/^(https?:\\/\\/)?(www\\.)?wa\\.me\\//i.test(href) || /api\\.whatsapp\\.com/i.test(href)) {
+    if (/^(https?:\/\/)?(www\.)?wa\.me\//i.test(href) || /api\.whatsapp\.com/i.test(href)) {
       track("jos_whatsapp_click", link);
     } else if (/^mailto:/i.test(href)) {
       track("jos_email_click", link);
