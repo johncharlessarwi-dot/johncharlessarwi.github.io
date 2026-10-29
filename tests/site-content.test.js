@@ -307,3 +307,13 @@ test("homepage links to three maintained official destinations and real live pro
   }
   assert.ok(html.includes('id="official-presence"'));
 });
+
+
+test("long-lived site pages show a current copyright year and last-updated date", () => {
+  const pages = ["index.html", "about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html", "software-developer-tanzania.html", "custom-software-development-tanzania.html"];
+  for (const page of pages) {
+    const html = read(page);
+    assert.match(html, /2026/, page + " must show the current year 2026");
+    assert.ok(html.includes("Last updated: 29 October 2026"), page + " must show a last-updated stamp");
+  }
+});
