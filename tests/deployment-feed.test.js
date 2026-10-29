@@ -58,13 +58,18 @@ test("returns public GitHub Actions workflow metadata without a Vercel token", a
   }
 });
 
-test("returns a safe error when GitHub Actions is unavailable", async () => {
+test("returns an empty optional feed when GitHub Actions is unavailable", async () => {
   const originalFetch = global.fetch;
   global.fetch = async () => new Response("rate limited", { status: 403 });
   try {
     const res = await callHandler({ method: "GET" });
-    assert.equal(res.statusCode, 502);
-    assert.match(res.body.error, /public delivery activity/);
+    assert.equal(res.statusCode, 200);
+    assert.deepEqual(res.body, {
+      deployments: [],
+      source: "github-actions",
+      count: 0,
+      unavailable: true
+    });
   } finally {
     global.fetch = originalFetch;
   }
