@@ -35,11 +35,21 @@
     if (!link) return;
 
     var href = link.getAttribute("href") || "";
-    if (/^(https?:\/\/)?(www\.)?wa\.me\//i.test(href) || /api\.whatsapp\.com/i.test(href)) {
+    var destination;
+    try {
+      destination = new URL(href, window.location.href);
+    } catch (error) {
+      return;
+    }
+
+    if (
+      (destination.protocol === "https:" || destination.protocol === "http:") &&
+      (destination.hostname === "wa.me" || destination.hostname === "www.wa.me" || destination.hostname === "api.whatsapp.com")
+    ) {
       track("jos_whatsapp_click", link);
-    } else if (/^mailto:/i.test(href)) {
+    } else if (href.toLowerCase().startsWith("mailto:")) {
       track("jos_email_click", link);
-    } else if (/^tel:/i.test(href)) {
+    } else if (href.toLowerCase().startsWith("tel:")) {
       track("jos_phone_click", link);
     }
   });
