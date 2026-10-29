@@ -171,3 +171,9 @@
 /* Publication freshness metadata */
 .last-updated{display:block;color:var(--muted);font-size:10px;line-height:1.6;letter-spacing:.02em}
 .site-footer .last-updated{flex-basis:100%}
+
+
+/* Legal navigation in site footers */
+.footer-legal{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.footer-legal a{font-size:10px;color:var(--muted)}
+.footer-legal a:hover{color:var(--cyan)}
