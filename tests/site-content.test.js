@@ -317,3 +317,21 @@ test("long-lived site pages show a current copyright year and last-updated date"
     assert.ok(html.includes("Last updated: 29 October 2026"), page + " must show a last-updated stamp");
   }
 });
+
+
+test("legal pages exist with metadata and both policies are linked from site footers", () => {
+  for (const page of ["terms.html", "privacy.html"]) {
+    const html = read(page);
+    assert.match(html, /<title>[^<]+<\/title>/);
+    assert.match(html, /<meta name="description" content="[^"]{110,160}">/);
+    assert.ok(html.includes("Last updated: 29 October 2026"));
+    assert.ok(html.includes("© 2026 JOHN ONLINE SERVICES AND APPLICATIONS"));
+    assert.ok(html.includes("application/ld+json"));
+  }
+  const pages = ["index.html", "about.html", "projects.html", "services.html", "resume.html", "contact.html", "bizflow-ai.html", "software-developer-tanzania.html", "custom-software-development-tanzania.html", "terms.html", "privacy.html"];
+  for (const page of pages) {
+    const html = read(page);
+    assert.ok(html.includes('href="./terms.html"'), page + " must link to Terms of Service");
+    assert.ok(html.includes('href="./privacy.html"'), page + " must link to Privacy Policy");
+  }
+});
