@@ -14,7 +14,7 @@ module.exports = async function handler(req, res) {
   const service = clean(body.service, 100), budget = clean(body.budget, 100);
   const message = clean(body.message, 4000), timeline = clean(body.timeline, 100);
   const contactPreference = clean(body.contactPreference, 40);
-  if (!name || !email || !service || message.length < 10 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))
+  if (!name || !email || !service || message.length < 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     return res.status(400).json({ error: "Please provide a valid name, email, service and project description." });
 
   const webhookUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
