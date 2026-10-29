@@ -129,5 +129,12 @@ if(projectForm){
 }
 $("year").textContent=new Date().getFullYear();
 if ($("form-started-at")) $("form-started-at").value=String(Date.now());
-loadProjects();loadEvents();loadDeployments();loadProjectUpdates();
+// Load the project catalogue first; defer secondary feeds until the browser is idle.
+function scheduleSecondaryLoads(){
+ const run=()=>{loadEvents();loadDeployments();loadProjectUpdates()};
+ if("requestIdleCallback" in window) window.requestIdleCallback(run,{timeout:2500});
+ else window.setTimeout(run,1200);
+}
+loadProjects();
+scheduleSecondaryLoads();
 setInterval(loadEvents,300000);setInterval(loadDeployments,300000);
