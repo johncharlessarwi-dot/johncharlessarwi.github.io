@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/readme/project-motion.svg" width="100%" alt="JOHN DEVELOPER PORTFOLIO animated overview banner" />
+</div>
+
 # John Charles Sarwi — Developer Portfolio
 
 A responsive developer portfolio with GitHub project discovery, public activity, a GitHub Actions delivery activity feed, and a project enquiry form.
