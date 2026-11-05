@@ -5,14 +5,14 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const code = fs.readFileSync(path.join(__dirname, '../google-apps-script/Code.gs'), 'utf8');
-function invoke(payload) {
+function invoke(payload, failConfirmation = false) {
   const sent = [];
   const context = {
     console: { error() {} },
     PropertiesService: { getScriptProperties: () => ({ getProperty(key) {
       return key === 'ORDER_WEBHOOK_SECRET' ? 'secret-for-test' : '';
     } }) },
-    GmailApp: { sendEmail(...args) { sent.push(args); } },
+    GmailApp: { sendEmail(...args) { if (failConfirmation && args[0] === payload.email) throw new Error("mailbox unavailable"); sent.push(args); } },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput(value) {
       return { value, setMimeType() { return this; } };
     } }
@@ -34,4 +34,10 @@ test('accepts legitimate order reference', () => {
   assert.equal(result.ok, true);
   assert.equal(result.orderId, base.orderId);
   assert.equal(sent.length, 2);
+});
+
+test("customer confirmation failure does not invalidate accepted order", () => {
+  const { result, sent } = invoke(base, true);
+  assert.equal(result.ok, true);
+  assert.equal(sent.length, 1);
 });
