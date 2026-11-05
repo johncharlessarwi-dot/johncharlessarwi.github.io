@@ -16,3 +16,11 @@ test('customer acknowledgement errors cannot cancel accepted orders', () => {
   assert.match(source, /Customer acknowledgement failed after order receipt/);
   assert.match(source, /return output\(\{ ok: true, orderId: data\.orderId \}\)/);
 });
+
+test("Apps Script independently validates email recipient syntax", () => {
+  assert.match(source, /typeof data\.email !== "string"/);
+  const emailCheck = source.split("\n").find(line => line.includes("typeof data.email"));
+  assert.ok(emailCheck);
+  assert.ok(emailCheck.includes(String.raw`[^\s@]`));
+  assert.ok(!emailCheck.includes(String.raw`[^\\s@]`));
+});
