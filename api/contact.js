@@ -6,6 +6,10 @@ module.exports = async function handler(req, res) {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed." });
   }
+  const contentType = req.headers && (req.headers["content-type"] || req.headers["Content-Type"]);
+  if (contentType && !/^application\/json(?:\s*;|\s*$)/i.test(contentType)) {
+    return res.status(415).json({ error: "Send the enquiry as JSON." });
+  }
   const body = typeof req.body === "string" ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })() : (req.body || {});
   const clean = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
   if (clean(body.website, 200)) return res.status(200).json({ ok: true });
