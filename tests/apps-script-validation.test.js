@@ -41,3 +41,9 @@ test("customer confirmation failure does not invalidate accepted order", () => {
   assert.equal(result.ok, true);
   assert.equal(sent.length, 1);
 });
+
+test("Apps Script rejects malformed customer email before delivery", () => {
+  const { result, sent } = invoke({ ...base, email: "customer\n@example.com" });
+  assert.equal(result.ok, false);
+  assert.equal(sent.length, 0);
+});
