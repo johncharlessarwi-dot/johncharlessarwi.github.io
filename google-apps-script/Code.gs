@@ -34,8 +34,14 @@ function doPost(e) {
     var confirmation = "Hello " + data.name + ",\n\nWe have received your project request.\n" +
       "Your order reference is " + data.orderId + ".\nRequested service: " + data.service +
       "\n\nWe will review your details and contact you soon.\n\nJOHN ONLINE SERVICES AND APPLICATIONS\njohncharlessarwi@gmail.com";
-    GmailApp.sendEmail(data.email, "We received your project request — " + data.orderId,
-      confirmation, { name: "JOHN ONLINE SERVICES AND APPLICATIONS" });
+    // The team notification has already succeeded; an acknowledgement failure
+    // must not prompt the customer to resubmit a duplicate project order.
+    try {
+      GmailApp.sendEmail(data.email, "We received your project request — " + data.orderId,
+        confirmation, { name: "JOHN ONLINE SERVICES AND APPLICATIONS" });
+    } catch (acknowledgementError) {
+      console.error("Customer acknowledgement failed after order receipt.");
+    }
     return output({ ok: true, orderId: data.orderId });
   } catch (error) {
     console.error(error);
