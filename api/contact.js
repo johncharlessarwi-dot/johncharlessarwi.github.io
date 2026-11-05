@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
     if (!response.ok || result.ok !== true || result.orderId !== orderId) return res.status(502).json({ error: "We could not deliver your order email. Please try again or contact us directly." });
     return res.status(200).json({ ok: true, orderId });
   } catch (error) {
-    console.error("Order email delivery failed:", error.message);
+    console.error("Order email delivery failed.");
     return res.status(502).json({ error: "Email delivery failed. Please try again later." });
   }
 };
