@@ -12,7 +12,9 @@
     window.dataLayer.push({
       event: eventName,
       // Query strings can contain prefilled messages or contact details.
-      link_url: link ? new URL(link.href, window.location.href).origin + new URL(link.href, window.location.href).pathname : undefined,
+      link_url: link && /^https?:/i.test(link.protocol)
+        ? link.origin + link.pathname
+        : undefined,
       page_path: window.location.pathname
     });
   }
