@@ -24,6 +24,11 @@ module.exports = async function handler(req, res) {
     return res.status(503).json({ error: "Order email is not fully configured yet. Please email johncharlessarwi@gmail.com directly." });
   }
 
+  // Never send the shared webhook secret to a non-Google endpoint.
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec\/?$/.test(webhookUrl)) {
+    return res.status(503).json({ error: "Order delivery endpoint is misconfigured." });
+  }
+
   const orderId = "JOS-" + new Date().toISOString().slice(0,10).replace(/-/g,"") + "-" + randomBytes(4).toString("hex").slice(0,8).toUpperCase();
   const payload = { secret: webhookSecret, orderId, name, email, phone, company, service, budget, timeline, contactPreference, message, submittedAt: new Date().toISOString() };
   try {
