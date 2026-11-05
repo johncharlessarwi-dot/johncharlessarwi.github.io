@@ -147,14 +147,21 @@ test("converts upstream network failures into a safe 502 response", async () => 
   const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
   const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
   const originalFetch = global.fetch;
+  const originalConsoleError = console.error;
+  const logMessages = [];
   process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/test-deployment/exec";
   process.env.ORDER_WEBHOOK_SECRET = "test-secret-only";
   global.fetch = async () => { throw new Error("private upstream diagnostic"); };
+  console.error = (...args) => logMessages.push(args.join(" "));
   try {
     const res = await callHandler(validRequest());
     assert.equal(res.statusCode, 502);
     assert.doesNotMatch(JSON.stringify(res.body), /private upstream diagnostic/);
+    assert.equal(logMessages.length, 1);
+    assert.match(logMessages[0], /Order email delivery failed/);
+    assert.doesNotMatch(logMessages.join(" "), /private upstream diagnostic/);
   } finally {
+    console.error = originalConsoleError;
     global.fetch = originalFetch;
     if (oldUrl === undefined) delete process.env.GOOGLE_APPS_SCRIPT_URL;
     else process.env.GOOGLE_APPS_SCRIPT_URL = oldUrl;
