@@ -22,3 +22,8 @@ test("analytics is privacy-conscious and does not hardcode vendor IDs", () => {
   assert.doesNotMatch(analytics, /G-[A-Z0-9]{6,}|GTM-[A-Z0-9]+/);
   assert.doesNotMatch(analytics, /document\.cookie|localStorage|sessionStorage/);
 });
+
+test("analytics avoids capturing prefilled message query strings", () => {
+  assert.match(analytics, /\.origin \+ new URL\(link\.href, window\.location\.href\)\.pathname/);
+  assert.doesNotMatch(analytics, /link_url:\s*link\s*\?\s*link\.href\s*:/);
+});
