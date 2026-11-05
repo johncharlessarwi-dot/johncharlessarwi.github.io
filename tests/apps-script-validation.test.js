@@ -47,3 +47,11 @@ test("Apps Script rejects malformed customer email before delivery", () => {
   assert.equal(result.ok, false);
   assert.equal(sent.length, 0);
 });
+
+test("Apps Script refuses unsigned or mismatched webhook secrets", () => {
+  for (const secret of ["", "incorrect-secret"]) {
+    const { result, sent } = invoke({ ...base, secret });
+    assert.equal(result.ok, false);
+    assert.equal(sent.length, 0);
+  }
+});
