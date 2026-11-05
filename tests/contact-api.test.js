@@ -177,3 +177,22 @@ test("control characters in email addresses are rejected", async () => {
   const res = await callHandler(validRequest({ email: "customer\n@example.com" }));
   assert.equal(res.statusCode, 400);
 });
+
+test("does not disclose webhook secret to unapproved destinations", async () => {
+  const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+  const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
+  const originalFetch = global.fetch;
+  process.env.GOOGLE_APPS_SCRIPT_URL = "https://untrusted.example/collect";
+  process.env.ORDER_WEBHOOK_SECRET = "sensitive-test-secret";
+  global.fetch = async () => { throw new Error("must never send secret"); };
+  try {
+    const res = await callHandler(validRequest());
+    assert.equal(res.statusCode, 503);
+  } finally {
+    global.fetch = originalFetch;
+    if (oldUrl === undefined) delete process.env.GOOGLE_APPS_SCRIPT_URL;
+    else process.env.GOOGLE_APPS_SCRIPT_URL = oldUrl;
+    if (oldSecret === undefined) delete process.env.ORDER_WEBHOOK_SECRET;
+    else process.env.ORDER_WEBHOOK_SECRET = oldSecret;
+  }
+});
