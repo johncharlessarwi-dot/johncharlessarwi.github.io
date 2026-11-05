@@ -161,3 +161,8 @@ test("converts upstream network failures into a safe 502 response", async () => 
     else process.env.ORDER_WEBHOOK_SECRET = oldSecret;
   }
 });
+
+test("outbound order delivery has a finite timeout", () => {
+  const source = require("node:fs").readFileSync(require("node:path").join(__dirname, "../api/contact.js"), "utf8");
+  assert.match(source, /signal:\s*AbortSignal\.timeout\(8000\)/);
+});
