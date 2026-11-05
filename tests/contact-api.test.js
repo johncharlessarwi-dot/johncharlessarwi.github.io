@@ -102,9 +102,10 @@ test("returns a cryptographically random order reference only when Apps Script a
     });
   };
   try {
-    const res = await callHandler(validRequest());
+    const res = await callHandler(validRequest({ message: "First paragraph about the website.\nSecond paragraph about booking." }));
     assert.equal(res.statusCode, 200);
     assert.equal(res.body.ok, true);
+    assert.match(forwarded.payload.message, /website\.\nSecond paragraph/);
     assert.match(res.body.orderId, /^JOS-\d{8}-[A-F0-9]{8}$/);
     assert.equal(forwarded.url, "https://script.example/exec");
     assert.equal(forwarded.options.method, "POST");
