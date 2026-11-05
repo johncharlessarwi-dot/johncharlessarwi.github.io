@@ -7,6 +7,9 @@ function doPost(e) {
     ["orderId", "name", "email", "service", "message"].forEach(function (key) {
       if (!String(data[key] || "").trim()) throw new Error("Missing required field: " + key);
     });
+    if (typeof data.email !== "string" || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email)) {
+      throw new Error("Invalid customer email");
+    }
     var inbox = props.getProperty("ORDER_INBOX") || "johncharlessarwi@gmail.com";
     var escapeHtml = function (value) {
       return String(value || "").replace(/[&<>"']/g, function (ch) {
