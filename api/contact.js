@@ -9,10 +9,11 @@ module.exports = async function handler(req, res) {
   const body = typeof req.body === "string" ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })() : (req.body || {});
   const clean = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
   if (clean(body.website, 200)) return res.status(200).json({ ok: true });
+  const cleanMessage = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
   const name = clean(body.name, 100), email = clean(body.email, 160);
   const phone = clean(body.phone, 40), company = clean(body.company, 120);
   const service = clean(body.service, 100), budget = clean(body.budget, 100);
-  const message = clean(body.message, 4000), timeline = clean(body.timeline, 100);
+  const message = cleanMessage(body.message, 4000), timeline = clean(body.timeline, 100);
   const contactPreference = clean(body.contactPreference, 40);
   if (!name || !email || !service || message.length < 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     return res.status(400).json({ error: "Please provide a valid name, email, service and project description." });
