@@ -41,7 +41,7 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify(payload), redirect: "follow", signal: AbortSignal.timeout(8000)
     });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok || result.ok !== true) return res.status(502).json({ error: "We could not deliver your order email. Please try again or contact us directly." });
+    if (!response.ok || result.ok !== true || result.orderId !== orderId) return res.status(502).json({ error: "We could not deliver your order email. Please try again or contact us directly." });
     return res.status(200).json({ ok: true, orderId });
   } catch (error) {
     console.error("Order email delivery failed:", error.message);
