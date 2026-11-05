@@ -196,3 +196,17 @@ test("does not disclose webhook secret to unapproved destinations", async () => 
     else process.env.ORDER_WEBHOOK_SECRET = oldSecret;
   }
 });
+
+test("rejects explicitly unsupported form content types", async () => {
+  const req = validRequest();
+  req.headers = { "content-type": "text/plain" };
+  const res = await callHandler(req);
+  assert.equal(res.statusCode, 415);
+});
+
+test("accepts JSON requests with charset parameters", async () => {
+  const req = validRequest({ email: "invalid" });
+  req.headers = { "content-type": "application/json; charset=utf-8" };
+  const res = await callHandler(req);
+  assert.equal(res.statusCode, 400);
+});
