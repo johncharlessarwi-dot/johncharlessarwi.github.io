@@ -24,6 +24,11 @@ test("analytics is privacy-conscious and does not hardcode vendor IDs", () => {
 });
 
 test("analytics avoids capturing prefilled message query strings", () => {
-  assert.match(analytics, /\.origin \+ new URL\(link\.href, window\.location\.href\)\.pathname/);
+  assert.match(analytics, /link\.origin \+ link\.pathname/);
   assert.doesNotMatch(analytics, /link_url:\s*link\s*\?\s*link\.href\s*:/);
+});
+
+test("analytics omits contact recipient values for email and phone clicks", () => {
+  assert.match(analytics, /\^https\?:/);
+  assert.doesNotMatch(analytics, /link_url:\s*link\.href/);
 });
