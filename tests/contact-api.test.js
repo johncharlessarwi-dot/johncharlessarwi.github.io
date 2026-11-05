@@ -166,3 +166,8 @@ test("outbound order delivery has a finite timeout", () => {
   const source = require("node:fs").readFileSync(require("node:path").join(__dirname, "../api/contact.js"), "utf8");
   assert.match(source, /signal:\s*AbortSignal\.timeout\(8000\)/);
 });
+
+test("rejects object-valued form fields instead of coercing them", async () => {
+  const res = await callHandler(validRequest({ name: { unexpected: "payload" } }));
+  assert.equal(res.statusCode, 400);
+});
