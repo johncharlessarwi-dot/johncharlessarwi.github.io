@@ -171,3 +171,8 @@ test("rejects object-valued form fields instead of coercing them", async () => {
   const res = await callHandler(validRequest({ name: { unexpected: "payload" } }));
   assert.equal(res.statusCode, 400);
 });
+
+test("control characters in email addresses are rejected", async () => {
+  const res = await callHandler(validRequest({ email: "customer\n@example.com" }));
+  assert.equal(res.statusCode, 400);
+});
