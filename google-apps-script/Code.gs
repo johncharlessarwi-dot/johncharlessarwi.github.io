@@ -7,6 +7,9 @@ function doPost(e) {
     ["orderId", "name", "email", "service", "message"].forEach(function (key) {
       if (!String(data[key] || "").trim()) throw new Error("Missing required field: " + key);
     });
+    if (typeof data.orderId !== "string" || !/^JOS-\\d{8}-[A-F0-9]{8}$/.test(data.orderId)) {
+      throw new Error("Invalid order reference");
+    }
     if (typeof data.email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
       throw new Error("Invalid customer email");
     }
