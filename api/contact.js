@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed." });
   }
   const body = typeof req.body === "string" ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })() : (req.body || {});
-  const clean = (value, max) => String(value || "").trim().slice(0, max);
+  const clean = (value, max) => typeof value === "string" ? value.trim().slice(0, max) : "";
   if (clean(body.website, 200)) return res.status(200).json({ ok: true });
   const name = clean(body.name, 100), email = clean(body.email, 160);
   const phone = clean(body.phone, 40), company = clean(body.company, 120);
