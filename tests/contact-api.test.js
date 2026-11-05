@@ -210,3 +210,22 @@ test("accepts JSON requests with charset parameters", async () => {
   const res = await callHandler(req);
   assert.equal(res.statusCode, 400);
 });
+
+test("rejects mismatched webhook delivery acknowledgement IDs", async () => {
+  const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+  const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
+  const originalFetch = global.fetch;
+  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/test-deployment/exec";
+  process.env.ORDER_WEBHOOK_SECRET = "test-secret";
+  global.fetch = async () => new Response(JSON.stringify({ ok: true, orderId: "OTHER-ORDER" }), { status: 200 });
+  try {
+    const res = await callHandler(validRequest());
+    assert.equal(res.statusCode, 502);
+  } finally {
+    global.fetch = originalFetch;
+    if (oldUrl === undefined) delete process.env.GOOGLE_APPS_SCRIPT_URL;
+    else process.env.GOOGLE_APPS_SCRIPT_URL = oldUrl;
+    if (oldSecret === undefined) delete process.env.ORDER_WEBHOOK_SECRET;
+    else process.env.ORDER_WEBHOOK_SECRET = oldSecret;
+  }
+});
