@@ -75,7 +75,7 @@ test("reports missing Apps Script URL", async () => {
 test("reports missing webhook secret instead of sending unsigned orders", async () => {
   const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
   const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
-  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.example/exec";
+  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/test-deployment/exec";
   delete process.env.ORDER_WEBHOOK_SECRET;
   try {
     const res = await callHandler(validRequest());
@@ -92,7 +92,7 @@ test("returns a cryptographically random order reference only when Apps Script a
   const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
   const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
   const originalFetch = global.fetch;
-  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.example/exec";
+  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/test-deployment/exec";
   process.env.ORDER_WEBHOOK_SECRET = "test-secret-only";
   let forwarded;
   global.fetch = async (url, options) => {
@@ -107,7 +107,7 @@ test("returns a cryptographically random order reference only when Apps Script a
     assert.equal(res.body.ok, true);
     assert.match(forwarded.payload.message, /website\.\nSecond paragraph/);
     assert.match(res.body.orderId, /^JOS-\d{8}-[A-F0-9]{8}$/);
-    assert.equal(forwarded.url, "https://script.example/exec");
+    assert.equal(forwarded.url, "https://script.google.com/macros/s/test-deployment/exec");
     assert.equal(forwarded.options.method, "POST");
     assert.equal(forwarded.options.redirect, "follow");
     assert.equal(forwarded.payload.secret, "test-secret-only");
@@ -125,7 +125,7 @@ test("does not report success when Apps Script rejects the order", async () => {
   const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
   const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
   const originalFetch = global.fetch;
-  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.example/exec";
+  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/test-deployment/exec";
   process.env.ORDER_WEBHOOK_SECRET = "test-secret-only";
   global.fetch = async () => new Response(JSON.stringify({ ok: false, error: "Unauthorized" }), {
     status: 200, headers: { "content-type": "application/json" }
@@ -147,7 +147,7 @@ test("converts upstream network failures into a safe 502 response", async () => 
   const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
   const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
   const originalFetch = global.fetch;
-  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.example/exec";
+  process.env.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/test-deployment/exec";
   process.env.ORDER_WEBHOOK_SECRET = "test-secret-only";
   global.fetch = async () => { throw new Error("private upstream diagnostic"); };
   try {
