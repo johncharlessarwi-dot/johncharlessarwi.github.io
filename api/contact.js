@@ -17,6 +17,9 @@ module.exports = async function handler(req, res) {
   const clean = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
   if (clean(body.website, 200)) return res.status(200).json({ ok: true });
   const cleanMessage = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
+  if (typeof body.message === "string" && body.message.length > 4000) {
+    return res.status(413).json({ error: "Project description is too long." });
+  }
   const name = clean(body.name, 100), email = clean(body.email, 160);
   const phone = clean(body.phone, 40), company = clean(body.company, 120);
   const service = clean(body.service, 100), budget = clean(body.budget, 100);
