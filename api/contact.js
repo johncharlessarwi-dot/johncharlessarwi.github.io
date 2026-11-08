@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed." });
   }
   const contentType = req.headers && (req.headers["content-type"] || req.headers["Content-Type"]);
-  if (contentType && !/^application\/json(?:\s*;|\s*$)/i.test(contentType)) {
+  if (!/^application\/json(?:\s*;|\s*$)/i.test(contentType || "")) {
     return res.status(415).json({ error: "Send the enquiry as JSON." });
   }
   const declaredLength = req.headers && Number(req.headers["content-length"]);
