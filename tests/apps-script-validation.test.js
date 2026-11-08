@@ -132,3 +132,16 @@ test("failed team delivery does not mark the order as processed", () => {
   assert.equal(retry.result.ok, true);
   assert.equal(retry.sent.length, 2);
 });
+
+
+test("receipt retention prunes old entries without touching configuration", () => {
+  const state = { properties: new Map([["ORDER_INBOX", "team@example.com"]]) };
+  for (let i = 0; i < 900; i++) {
+    state.properties.set("ORDER_DONE_JOS-20250101-" + i.toString(16).toUpperCase().padStart(8, "0"), "2025-01-01T00:00:00Z");
+  }
+  const { result } = invoke(base, false, state);
+  assert.equal(result.ok, true);
+  assert.equal(state.properties.get("ORDER_INBOX"), "team@example.com");
+  assert.equal(state.properties.has("ORDER_DONE_JOS-20250101-00000000"), false);
+  assert.ok(state.properties.has("ORDER_DONE_" + base.orderId));
+});
