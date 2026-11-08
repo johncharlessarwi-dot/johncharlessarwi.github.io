@@ -28,7 +28,7 @@ module.exports = async function handler(req, res) {
       createdAt: run.created_at ? Date.parse(run.created_at) : null,
       commitMessage: typeof run.display_title === "string" ? run.display_title.slice(0, 200) : "Workflow run",
       commitRef: run.head_branch || null,
-      commitSha: run.head_sha || null
+      commitSha: typeof run.head_sha === "string" && /^[a-f0-9]{7,64}$/i.test(run.head_sha) ? run.head_sha : null
     }));
     return res.status(200).json({ deployments, source: "github-actions", count: deployments.length });
   } catch (error) {
