@@ -236,3 +236,25 @@ test("rejects mismatched webhook delivery acknowledgement IDs", async () => {
     else process.env.ORDER_WEBHOOK_SECRET = oldSecret;
   }
 });
+
+
+test("rejects oversized declared request bodies before forwarding", async () => {
+  const req = validRequest();
+  req.headers = { "content-length": String(16 * 1024 + 1) };
+  const res = await callHandler(req);
+  assert.equal(res.statusCode, 413);
+});
+
+test("rejects oversized raw JSON before parsing", async () => {
+  const req = validRequest();
+  req.body = "x".repeat(16 * 1024 + 1);
+  const res = await callHandler(req);
+  assert.equal(res.statusCode, 413);
+});
+
+test("does not confuse Unicode character count with body byte size", async () => {
+  const req = validRequest();
+  req.body = "😊".repeat(4200);
+  const res = await callHandler(req);
+  assert.equal(res.statusCode, 413);
+});
