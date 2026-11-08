@@ -10,6 +10,13 @@ module.exports = async function handler(req, res) {
   if (contentType && !/^application\/json(?:\s*;|\s*$)/i.test(contentType)) {
     return res.status(415).json({ error: "Send the enquiry as JSON." });
   }
+  const declaredLength = req.headers && Number(req.headers["content-length"]);
+  if (Number.isFinite(declaredLength) && declaredLength > 16 * 1024) {
+    return res.status(413).json({ error: "Enquiry payload is too large." });
+  }
+  if (typeof req.body === "string" && Buffer.byteLength(req.body, "utf8") > 16 * 1024) {
+    return res.status(413).json({ error: "Enquiry payload is too large." });
+  }
   const body = typeof req.body === "string" ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })() : (req.body || {});
   if (!body || typeof body !== "object" || Array.isArray(body)) {
     return res.status(400).json({ error: "Invalid enquiry data." });
