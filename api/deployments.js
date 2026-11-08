@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
       });
     }
     const payload = await response.json();
-    const deployments = (payload.workflow_runs || []).map(run => ({
+    const deployments = (Array.isArray(payload.workflow_runs) ? payload.workflow_runs.slice(0, 12) : []).map(run => ({
       projectName: run.name || "Portfolio CI/CD",
       state: run.status === "completed" ? (run.conclusion || "completed").toUpperCase() : (run.status || "queued").toUpperCase(),
       target: "github-actions",
