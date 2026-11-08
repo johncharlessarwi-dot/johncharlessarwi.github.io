@@ -32,6 +32,12 @@ module.exports = async function handler(req, res) {
   if (Object.keys(body).length === 0) {
     return res.status(400).json({ error: "Enquiry cannot be empty." });
   }
+  // Directional override marks can disguise contact details in notification emails.
+  const unsafeDirectional = /[\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069]/;
+  const contactFields = ["name", "email", "phone", "company", "service", "budget", "timeline", "contactPreference", "message"];
+  if (contactFields.some((key) => typeof body[key] === "string" && unsafeDirectional.test(body[key]))) {
+    return res.status(400).json({ error: "Unsupported directional characters in enquiry." });
+  }
   const clean = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
   if (clean(body.website, 200)) return res.status(200).json({ ok: true });
   const cleanMessage = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
