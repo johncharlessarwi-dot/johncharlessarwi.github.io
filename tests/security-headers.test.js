@@ -13,3 +13,8 @@ test("Vercel CSP prohibits framing and active plugin content", () => {
   assert.match(headers["content-security-policy"], /object-src 'none'/);
   assert.match(headers["content-security-policy"], /base-uri 'self'/);
 });
+
+
+test("legacy browsers receive explicit clickjacking denial", () => {
+  assert.equal(headers["x-frame-options"], "DENY");
+});
