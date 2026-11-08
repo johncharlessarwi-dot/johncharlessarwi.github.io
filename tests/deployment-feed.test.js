@@ -81,6 +81,7 @@ test("returns a safe error when the public feed request fails", async () => {
   try {
     const res = await callHandler({ method: "GET" });
     assert.equal(res.statusCode, 502);
+    assert.equal(res.headers["Cache-Control"], "no-store");
     assert.doesNotMatch(JSON.stringify(res.body), /private network diagnostic/);
   } finally {
     global.fetch = originalFetch;
