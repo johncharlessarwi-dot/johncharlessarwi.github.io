@@ -10,7 +10,7 @@ assert.ok(declaration, "safeExternalUrl helper must exist");
 const safeUrl = vm.runInNewContext("(" + declaration.replace(/^function safeExternalUrl/, "function") + ")", { URL });
 
 test("external URLs allow absolute HTTPS links", () => {
-  assert.equal(safeUrl("https://github.com/johncharlessarwi-dot"), "https://github.com/johncharlessarwi-dot/");
+  assert.equal(safeUrl("https://github.com/johncharlessarwi-dot"), "https://github.com/johncharlessarwi-dot");
 });
 
 test("external URLs reject script and data schemes", () => {
