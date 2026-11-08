@@ -55,3 +55,10 @@ test("Apps Script refuses unsigned or mismatched webhook secrets", () => {
     assert.equal(sent.length, 0);
   }
 });
+
+
+test("Apps Script refuses oversized webhook payloads without delivering emails", () => {
+  const { result, sent } = invoke({ ...base, message: "x".repeat(21000) });
+  assert.equal(result.ok, false);
+  assert.equal(sent.length, 0);
+});
