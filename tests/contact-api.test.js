@@ -258,3 +258,16 @@ test("does not confuse Unicode character count with body byte size", async () =>
   const res = await callHandler(req);
   assert.equal(res.statusCode, 413);
 });
+
+
+test("rejects oversized parsed object payloads", async () => {
+  const res = await callHandler(validRequest({ extra: "x".repeat(20 * 1024) }));
+  assert.equal(res.statusCode, 413);
+});
+
+test("rejects unserializable cyclic object payloads safely", async () => {
+  const req = validRequest();
+  req.body.self = req.body;
+  const res = await callHandler(req);
+  assert.equal(res.statusCode, 400);
+});
