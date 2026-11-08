@@ -32,7 +32,7 @@ module.exports = async function handler(req, res) {
     }));
     return res.status(200).json({ deployments, source: "github-actions", count: deployments.length });
   } catch (error) {
-    console.error("Public delivery activity failed:", error.message);
+    console.error("Public delivery activity failed.");
     return res.status(502).json({ error: "Could not retrieve public delivery activity." });
   }
 };
