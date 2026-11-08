@@ -25,6 +25,11 @@ function doPost(e) {
         typeof data.name !== "string" || data.name.length > 100 || /[\r\n]/.test(data.name)) {
       throw new Error("Invalid email display fields");
     }
+    var visibleFields = ["name", "email", "phone", "company", "service", "budget", "timeline", "contactPreference", "message"];
+    var unsafeDirectional = /[\u200E\u200F\u202A-\u202E\u2066-\u2069]/;
+    if (visibleFields.some(function (field) { return typeof data[field] === "string" && unsafeDirectional.test(data[field]); })) {
+      throw new Error("Unsupported directional control");
+    }
     var inbox = props.getProperty("ORDER_INBOX") || "johncharlessarwi@gmail.com";
     var escapeHtml = function (value) {
       return String(value || "").replace(/[&<>"']/g, function (ch) {
