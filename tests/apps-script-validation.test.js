@@ -80,3 +80,10 @@ test("Apps Script enforces independent customer field size limits", () => {
     assert.equal(sent.length, 0);
   }
 });
+
+
+test("Apps Script blocks directional control characters in order details", () => {
+  const { result, sent } = invoke({ ...base, message: "Website" + String.fromCharCode(0x202E) + "details" });
+  assert.equal(result.ok, false);
+  assert.equal(sent.length, 0);
+});
