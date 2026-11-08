@@ -1,6 +1,10 @@
 function doPost(e) {
   try {
-    var data = JSON.parse((e && e.postData && e.postData.contents) || "{}");
+    var rawBody = (e && e.postData && e.postData.contents) || "{}";
+    if (typeof rawBody !== "string" || rawBody.length > 20000) {
+      return output({ ok: false, error: "Invalid payload" });
+    }
+    var data = JSON.parse(rawBody);
     var props = PropertiesService.getScriptProperties();
     var expected = props.getProperty("ORDER_WEBHOOK_SECRET") || "";
     if (!expected || data.secret !== expected) return output({ ok: false, error: "Unauthorized" });
@@ -50,7 +54,8 @@ function doPost(e) {
     }
     return output({ ok: true, orderId: data.orderId });
   } catch (error) {
-    console.error(error);
+    // Avoid logging raw user data or authentication material from exceptions.
+    console.error("Project order processing failed.");
     return output({ ok: false, error: "Order processing failed" });
   }
 }
