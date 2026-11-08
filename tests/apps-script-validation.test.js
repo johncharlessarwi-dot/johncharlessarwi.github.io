@@ -111,3 +111,10 @@ test("Apps Script acknowledges retried order IDs without duplicate email deliver
   assert.equal(second.sent.length, 0);
   assert.equal(state.released, true);
 });
+
+
+test("Apps Script refuses delivery when order lock is unavailable", () => {
+  const { result, sent } = invoke(base, false, { lockAvailable: false });
+  assert.equal(result.ok, false);
+  assert.equal(sent.length, 0);
+});
