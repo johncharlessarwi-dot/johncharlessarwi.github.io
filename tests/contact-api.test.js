@@ -279,3 +279,11 @@ test("rejects directional override tricks in customer fields", async () => {
     assert.equal(res.statusCode, 400, field);
   }
 });
+
+
+test("rejects overlong optional enquiry fields instead of silently truncating", async () => {
+  for (const [field, length] of Object.entries({ phone: 41, company: 121, budget: 101, timeline: 101, contactPreference: 41 })) {
+    const res = await callHandler(validRequest({ [field]: "x".repeat(length) }));
+    assert.equal(res.statusCode, 413, field);
+  }
+});
