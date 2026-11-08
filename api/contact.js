@@ -81,7 +81,7 @@ module.exports = async function handler(req, res) {
   }
 
   // Never send the shared webhook secret to a non-Google endpoint.
-  if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec\/?$/.test(webhookUrl)) {
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec\/?$/.test(webhookUrl)) {
     return res.status(503).json({ error: "Order delivery endpoint is misconfigured." });
   }
 
