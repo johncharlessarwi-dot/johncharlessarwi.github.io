@@ -13,6 +13,8 @@ let projects=[],filter="all",query="",showAllProjects=false;
 const INITIAL_PROJECT_LIMIT=12;
 const $=id=>document.getElementById(id);
 const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+// Escape HTML separately; only absolute HTTPS URLs are safe for external href attributes.
+function safeExternalUrl(value){try{const url=new URL(String(value));return url.protocol==="https:"?url.href:null}catch{return null}}
 async function api(path){const r=await fetch(API+path,{headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw Error("GitHub "+r.status);return r.json()}
 function category(r){const s=(r.name+" "+(r.description||"")).toLowerCase();return /ai|agent|assistant|automation|bot/.test(s)?"ai":/system|management|erp|pharmacy|agrovet|microfinance|attendance|network/.test(s)?"systems":"web"}
 function renderProjects(){
