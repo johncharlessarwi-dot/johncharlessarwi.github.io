@@ -17,6 +17,11 @@ function doPost(e) {
     if (typeof data.email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
       throw new Error("Invalid customer email");
     }
+    // Validate mail subject and display-name fields independently of the website.
+    if (typeof data.service !== "string" || data.service.length > 100 || /[\\r\\n]/.test(data.service) ||
+        typeof data.name !== "string" || data.name.length > 100 || /[\\r\\n]/.test(data.name)) {
+      throw new Error("Invalid email display fields");
+    }
     var inbox = props.getProperty("ORDER_INBOX") || "johncharlessarwi@gmail.com";
     var escapeHtml = function (value) {
       return String(value || "").replace(/[&<>"']/g, function (ch) {
