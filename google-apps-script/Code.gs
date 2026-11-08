@@ -17,6 +17,9 @@ function doPost(e) {
     if (typeof data.email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
       throw new Error("Invalid customer email");
     }
+    if (data.email.length > 160 || typeof data.message !== "string" || data.message.length > 4000) {
+      throw new Error("Excessive customer field length");
+    }
     // Validate mail subject and display-name fields independently of the website.
     if (typeof data.service !== "string" || data.service.length > 100 || /[\r\n]/.test(data.service) ||
         typeof data.name !== "string" || data.name.length > 100 || /[\r\n]/.test(data.name)) {
