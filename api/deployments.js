@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
       state: run.status === "completed" ? (run.conclusion || "completed").toUpperCase() : (run.status || "queued").toUpperCase(),
       target: "github-actions",
       url: typeof run.html_url === "string" && /^https:\/\/github\.com\/johncharlessarwi-dot\/johncharlessarwi\.github\.io\/actions\/runs\/\d+$/.test(run.html_url) ? run.html_url : null,
-      createdAt: run.created_at ? Date.parse(run.created_at) : null,
+      createdAt: typeof run.created_at === "string" && Number.isFinite(Date.parse(run.created_at)) ? Date.parse(run.created_at) : null,
       commitMessage: typeof run.display_title === "string" ? run.display_title.slice(0, 200) : "Workflow run",
       commitRef: typeof run.head_branch === "string" ? run.head_branch.slice(0, 100) : null,
       commitSha: typeof run.head_sha === "string" && /^[a-f0-9]{7,64}$/i.test(run.head_sha) ? run.head_sha : null
