@@ -12,7 +12,7 @@ function invoke(payload, failConfirmation = false, state = {}) {
     console: { error() {} },
     PropertiesService: { getScriptProperties: () => ({ getProperty(key) {
       return key === 'ORDER_WEBHOOK_SECRET' ? 'secret-for-test' : (properties.get(key) || '');
-    }, setProperty(key, value) { properties.set(key, value); } }) },
+    }, setProperty(key, value) { properties.set(key, value); }, getProperties() { return Object.fromEntries(properties); }, deleteProperty(key) { properties.delete(key); } }) },
     LockService: { getScriptLock: () => ({ tryLock() { return state.lockAvailable !== false; }, releaseLock() { state.released = true; } }) },
     GmailApp: { sendEmail(...args) { if (failConfirmation && args[0] === payload.email) throw new Error("mailbox unavailable"); if (state.failTeam && args[0] !== payload.email) throw new Error("team mailbox unavailable"); sent.push(args); } },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput(value) {
