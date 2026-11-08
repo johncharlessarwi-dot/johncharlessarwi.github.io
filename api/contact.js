@@ -62,6 +62,10 @@ module.exports = async function handler(req, res) {
   if (body.message !== undefined && typeof body.message !== "string") {
     return res.status(400).json({ error: "Project description must be text." });
   }
+  const optionalLimits = { phone: 40, company: 120, budget: 100, timeline: 100, contactPreference: 40 };
+  if (Object.entries(optionalLimits).some(([key, max]) => typeof body[key] === "string" && body[key].length > max)) {
+    return res.status(413).json({ error: "An optional enquiry field is too long." });
+  }
   const name = clean(body.name, 100), email = clean(body.email, 160);
   const phone = clean(body.phone, 40), company = clean(body.company, 120);
   const service = clean(body.service, 100), budget = clean(body.budget, 100);
