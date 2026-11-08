@@ -30,6 +30,12 @@ function doPost(e) {
     if (visibleFields.some(function (field) { return typeof data[field] === "string" && unsafeDirectional.test(data[field]); })) {
       throw new Error("Unsupported directional control");
     }
+    var optionalLimits = { phone: 40, company: 120, budget: 100, timeline: 100, contactPreference: 40 };
+    Object.keys(optionalLimits).forEach(function (field) {
+      if (data[field] !== undefined && (typeof data[field] !== "string" || data[field].length > optionalLimits[field])) {
+        throw new Error("Invalid optional field");
+      }
+    });
     var inbox = props.getProperty("ORDER_INBOX") || "johncharlessarwi@gmail.com";
     var escapeHtml = function (value) {
       return String(value || "").replace(/[&<>"']/g, function (ch) {
