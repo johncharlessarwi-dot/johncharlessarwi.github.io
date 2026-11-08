@@ -11,6 +11,9 @@ module.exports = async function handler(req, res) {
     return res.status(415).json({ error: "Send the enquiry as JSON." });
   }
   const body = typeof req.body === "string" ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })() : (req.body || {});
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return res.status(400).json({ error: "Invalid enquiry data." });
+  }
   const clean = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
   if (clean(body.website, 200)) return res.status(200).json({ ok: true });
   const cleanMessage = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
