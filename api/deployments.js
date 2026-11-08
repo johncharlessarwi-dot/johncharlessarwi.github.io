@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
   // Read public GitHub Actions metadata; no Vercel API token is required.
   try {
     const response = await fetch("https://api.github.com/repos/johncharlessarwi-dot/johncharlessarwi.github.io/actions/runs?per_page=12", {
-      headers: { Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" }
+      headers: { Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" }, signal: AbortSignal.timeout(6000)
     });
     if (!response.ok) {
       // GitHub may deny unauthenticated Actions-run access (HTTP 403).
