@@ -18,8 +18,8 @@ function doPost(e) {
       throw new Error("Invalid customer email");
     }
     // Validate mail subject and display-name fields independently of the website.
-    if (typeof data.service !== "string" || data.service.length > 100 || /[\\r\\n]/.test(data.service) ||
-        typeof data.name !== "string" || data.name.length > 100 || /[\\r\\n]/.test(data.name)) {
+    if (typeof data.service !== "string" || data.service.length > 100 || /[\r\n]/.test(data.service) ||
+        typeof data.name !== "string" || data.name.length > 100 || /[\r\n]/.test(data.name)) {
       throw new Error("Invalid email display fields");
     }
     var inbox = props.getProperty("ORDER_INBOX") || "johncharlessarwi@gmail.com";
