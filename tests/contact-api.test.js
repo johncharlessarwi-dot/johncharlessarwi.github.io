@@ -287,3 +287,29 @@ test("rejects overlong optional enquiry fields instead of silently truncating", 
     assert.equal(res.statusCode, 413, field);
   }
 });
+
+
+test("rejects malformed Apps Script deployment IDs without forwarding secrets", async () => {
+  const oldUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+  const oldSecret = process.env.ORDER_WEBHOOK_SECRET;
+  const originalFetch = global.fetch;
+  process.env.ORDER_WEBHOOK_SECRET = "private-test-secret";
+  global.fetch = async () => { throw Error("outbound fetch must not run"); };
+  try {
+    for (const url of [
+      "https://script.google.com/macros/s/id?x=1/exec",
+      "https://script.google.com/macros/s/id#x/exec",
+      "https://script.google.com/macros/s/id%2Fother/exec"
+    ]) {
+      process.env.GOOGLE_APPS_SCRIPT_URL = url;
+      const res = await callHandler(validRequest());
+      assert.equal(res.statusCode, 503, url);
+    }
+  } finally {
+    global.fetch = originalFetch;
+    if (oldUrl === undefined) delete process.env.GOOGLE_APPS_SCRIPT_URL;
+    else process.env.GOOGLE_APPS_SCRIPT_URL = oldUrl;
+    if (oldSecret === undefined) delete process.env.ORDER_WEBHOOK_SECRET;
+    else process.env.ORDER_WEBHOOK_SECRET = oldSecret;
+  }
+});
