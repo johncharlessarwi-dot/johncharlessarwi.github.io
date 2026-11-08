@@ -20,6 +20,9 @@ module.exports = async function handler(req, res) {
   if (typeof body.message === "string" && body.message.length > 4000) {
     return res.status(413).json({ error: "Project description is too long." });
   }
+  if (typeof body.name === "string" && body.name.length > 100) {
+    return res.status(413).json({ error: "Name is too long." });
+  }
   const name = clean(body.name, 100), email = clean(body.email, 160);
   const phone = clean(body.phone, 40), company = clean(body.company, 120);
   const service = clean(body.service, 100), budget = clean(body.budget, 100);
