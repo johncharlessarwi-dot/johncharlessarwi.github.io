@@ -61,6 +61,7 @@ function doPost(e) {
     var orderLock = LockService.getScriptLock();
     if (!orderLock.tryLock(10000)) return output({ ok: false, error: "Order is busy" });
     try {
+      pruneOldReceipts(props);
       var receiptKey = "ORDER_DONE_" + data.orderId;
       if (props.getProperty(receiptKey)) return output({ ok: true, orderId: data.orderId });
       GmailApp.sendEmail(inbox, "New project order " + data.orderId + " — " + data.service,
@@ -90,4 +91,21 @@ function doPost(e) {
 function output(value) {
   return ContentService.createTextOutput(JSON.stringify(value))
     .setMimeType(ContentService.MimeType.JSON);
+}
+// Bound Script Properties growth while retaining recent replay protection.
+function pruneOldReceipts(props) {
+  var all = props.getProperties();
+  var keys = Object.keys(all).filter(function (key) { return key.indexOf("ORDER_DONE_") === 0; });
+  if (keys.length < 900) return;
+  var now = Date.now();
+  var maxAge = 90 * 24 * 60 * 60 * 1000;
+  keys.sort(function (a, b) { return (Date.parse(all[a]) || 0) - (Date.parse(all[b]) || 0); });
+  var removed = 0;
+  keys.forEach(function (key) {
+    var timestamp = Date.parse(all[key]);
+    if (!Number.isFinite(timestamp) || now - timestamp > maxAge || keys.length - removed > 900) {
+      props.deleteProperty(key);
+      removed++;
+    }
+  });
 }
