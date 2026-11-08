@@ -58,8 +58,17 @@ function doPost(e) {
       fields.map(function (field) { return "<tr><td><b>" + escapeHtml(field[0]) +
       "</b></td><td>" + escapeHtml(field[1]) + "</td></tr>"; }).join("") +
       "</table><h3>Project details</h3><p style='white-space:pre-wrap'>" + escapeHtml(data.message) + "</p>";
-    GmailApp.sendEmail(inbox, "New project order " + data.orderId + " — " + data.service,
-      plain, { htmlBody: html, replyTo: data.email, name: "JOHN ONLINE SERVICES AND APPLICATIONS" });
+    var orderLock = LockService.getScriptLock();
+    if (!orderLock.tryLock(10000)) return output({ ok: false, error: "Order is busy" });
+    try {
+      var receiptKey = "ORDER_DONE_" + data.orderId;
+      if (props.getProperty(receiptKey)) return output({ ok: true, orderId: data.orderId });
+      GmailApp.sendEmail(inbox, "New project order " + data.orderId + " — " + data.service,
+        plain, { htmlBody: html, replyTo: data.email, name: "JOHN ONLINE SERVICES AND APPLICATIONS" });
+      props.setProperty(receiptKey, new Date().toISOString());
+    } finally {
+      orderLock.releaseLock();
+    }
     var confirmation = "Hello " + data.name + ",\n\nWe have received your project request.\n" +
       "Your order reference is " + data.orderId + ".\nRequested service: " + data.service +
       "\n\nWe will review your details and contact you soon.\n\nJOHN ONLINE SERVICES AND APPLICATIONS\njohncharlessarwi@gmail.com";
