@@ -98,3 +98,16 @@ test("Apps Script rejects malformed optional order fields", () => {
     assert.equal(sent.length, 0);
   }
 });
+
+
+test("Apps Script acknowledges retried order IDs without duplicate email delivery", () => {
+  const state = {};
+  const first = invoke(base, false, state);
+  const second = invoke(base, false, state);
+  assert.equal(first.result.ok, true);
+  assert.equal(first.sent.length, 2);
+  assert.equal(second.result.ok, true);
+  assert.equal(second.result.orderId, base.orderId);
+  assert.equal(second.sent.length, 0);
+  assert.equal(state.released, true);
+});
