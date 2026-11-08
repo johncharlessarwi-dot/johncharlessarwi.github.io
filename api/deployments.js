@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
       });
     }
     const payload = await response.json();
-    const deployments = (Array.isArray(payload.workflow_runs) ? payload.workflow_runs.slice(0, 12) : []).filter(run => run && typeof run === "object").map(run => ({
+    const deployments = (payload && Array.isArray(payload.workflow_runs) ? payload.workflow_runs.slice(0, 12) : []).filter(run => run && typeof run === "object").map(run => ({
       projectName: typeof run.name === "string" ? run.name.slice(0, 100) : "Portfolio CI/CD",
       state: run.status === "completed" ? (run.conclusion || "completed").toUpperCase() : (run.status || "queued").toUpperCase(),
       target: "github-actions",
