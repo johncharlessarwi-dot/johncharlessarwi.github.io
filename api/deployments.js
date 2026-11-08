@@ -20,9 +20,14 @@ module.exports = async function handler(req, res) {
       });
     }
     const payload = await response.json();
+    const allowedStates = new Set(["SUCCESS", "FAILURE", "CANCELLED", "SKIPPED", "TIMED_OUT", "NEUTRAL", "ACTION_REQUIRED", "STALE", "QUEUED", "IN_PROGRESS", "PENDING", "WAITING", "REQUESTED", "COMPLETED"]);
+    const safeState = (value) => {
+      const state = typeof value === "string" ? value.toUpperCase() : "UNKNOWN";
+      return allowedStates.has(state) ? state : "UNKNOWN";
+    };
     const deployments = (payload && Array.isArray(payload.workflow_runs) ? payload.workflow_runs.slice(0, 12) : []).filter(run => run && typeof run === "object").map(run => ({
       projectName: typeof run.name === "string" ? run.name.slice(0, 100) : "Portfolio CI/CD",
-      state: run.status === "completed" ? (run.conclusion || "completed").toUpperCase() : (run.status || "queued").toUpperCase(),
+      state: safeState(run.status === "completed" ? (run.conclusion || "completed") : (run.status || "queued")),
       target: "github-actions",
       url: typeof run.html_url === "string" && /^https:\/\/github\.com\/johncharlessarwi-dot\/johncharlessarwi\.github\.io\/actions\/runs\/\d+$/.test(run.html_url) ? run.html_url : null,
       createdAt: typeof run.created_at === "string" && Number.isFinite(Date.parse(run.created_at)) ? Date.parse(run.created_at) : null,
