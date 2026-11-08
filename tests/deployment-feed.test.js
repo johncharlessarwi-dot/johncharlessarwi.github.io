@@ -87,3 +87,20 @@ test("returns a safe error when the public feed request fails", async () => {
     global.fetch = originalFetch;
   }
 });
+
+
+test("normalizes unexpected workflow state values", async () => {
+  const originalFetch = global.fetch;
+  global.fetch = async () => new Response(JSON.stringify({ workflow_runs: [
+    { name: "Untrusted", status: "malicious custom class", html_url: "https://example.com", head_sha: "not-a-sha" }
+  ] }), { status: 200 });
+  try {
+    const res = await callHandler({ method: "GET" });
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.body.deployments[0].state, "UNKNOWN");
+    assert.equal(res.body.deployments[0].url, null);
+    assert.equal(res.body.deployments[0].commitSha, null);
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
