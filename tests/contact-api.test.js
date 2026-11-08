@@ -275,7 +275,7 @@ test("rejects unserializable cyclic object payloads safely", async () => {
 
 test("rejects directional override tricks in customer fields", async () => {
   for (const field of ["name", "email", "phone", "service", "message"]) {
-    const res = await callHandler(validRequest({ [field]: "Example\\u202Ehidden" }));
+    const res = await callHandler(validRequest({ [field]: "Example" + String.fromCharCode(0x202E) + "hidden" }));
     assert.equal(res.statusCode, 400, field);
   }
 });
