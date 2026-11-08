@@ -271,3 +271,11 @@ test("rejects unserializable cyclic object payloads safely", async () => {
   const res = await callHandler(req);
   assert.equal(res.statusCode, 400);
 });
+
+
+test("rejects directional override tricks in customer fields", async () => {
+  for (const field of ["name", "email", "phone", "service", "message"]) {
+    const res = await callHandler(validRequest({ [field]: "Example\\u202Ehidden" }));
+    assert.equal(res.statusCode, 400, field);
+  }
+});
