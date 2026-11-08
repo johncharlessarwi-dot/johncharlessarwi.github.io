@@ -99,7 +99,7 @@ async function loadDeployments(){
    const state=String(d.state||"unknown").toLowerCase(),name=d.projectName||d.project||"Portfolio workflow";
    const title=d.commitMessage||"Workflow run";
    const shortSha=d.commitSha?d.commitSha.slice(0,7):"source";
-   const href=d.url?(d.url.startsWith("http")?d.url:"https://"+d.url):null;
+   const href=safeExternalUrl(d.url);
    return '<article class="deploy-card"><div class="deploy-card-top"><span>'+safe(name)+'</span><span class="deploy-state '+safe(state)+'">'+safe(d.state||"UNKNOWN")+'</span></div><h3>'+safe(title)+'</h3><p>'+(d.branch?"Branch: "+safe(d.branch)+" · ":"")+safe(d.commitRef||"Workflow run")+'</p><div class="deploy-meta"><span>'+safe(shortSha)+' · '+safe(timeAgo(d.createdAt))+'</span>'+(href?'<a href="'+safe(href)+'" target="_blank" rel="noreferrer">View workflow ↗</a>':"<span>URL unavailable</span>")+'</div></article>'
   }).join(""):'<div class="empty">No recent GitHub Actions workflow runs were returned.</div>';
  }catch(e){status.textContent="DELIVERY ACTIVITY UNAVAILABLE";list.innerHTML='<div class="empty">The public workflow feed could not be loaded. Check GitHub Actions and refresh shortly.</div>'}
