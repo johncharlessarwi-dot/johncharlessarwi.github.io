@@ -87,3 +87,12 @@ test("Apps Script blocks directional control characters in order details", () =>
   assert.equal(result.ok, false);
   assert.equal(sent.length, 0);
 });
+
+
+test("Apps Script rejects malformed optional order fields", () => {
+  for (const patch of [{ phone: { unexpected: true } }, { company: "x".repeat(121) }, { contactPreference: "x".repeat(41) }]) {
+    const { result, sent } = invoke({ ...base, ...patch });
+    assert.equal(result.ok, false);
+    assert.equal(sent.length, 0);
+  }
+});
