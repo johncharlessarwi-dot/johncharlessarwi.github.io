@@ -14,6 +14,9 @@ module.exports = async function handler(req, res) {
   if (!body || typeof body !== "object" || Array.isArray(body)) {
     return res.status(400).json({ error: "Invalid enquiry data." });
   }
+  if (Object.keys(body).length === 0) {
+    return res.status(400).json({ error: "Enquiry cannot be empty." });
+  }
   const clean = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
   if (clean(body.website, 200)) return res.status(200).json({ ok: true });
   const cleanMessage = (value, max) => typeof value === "string" ? value.replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, " ").trim().slice(0, max) : "";
