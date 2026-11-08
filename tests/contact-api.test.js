@@ -16,6 +16,7 @@ function responseRecorder() {
 function validRequest(overrides = {}) {
   return {
     method: "POST",
+    headers: { "content-type": "application/json" },
     body: {
       name: "Test Customer",
       email: "customer@example.com",
@@ -240,7 +241,7 @@ test("rejects mismatched webhook delivery acknowledgement IDs", async () => {
 
 test("rejects oversized declared request bodies before forwarding", async () => {
   const req = validRequest();
-  req.headers = { "content-length": String(16 * 1024 + 1) };
+  req.headers = { "content-type": "application/json", "content-length": String(16 * 1024 + 1) };
   const res = await callHandler(req);
   assert.equal(res.statusCode, 413);
 });
@@ -312,4 +313,12 @@ test("rejects malformed Apps Script deployment IDs without forwarding secrets", 
     if (oldSecret === undefined) delete process.env.ORDER_WEBHOOK_SECRET;
     else process.env.ORDER_WEBHOOK_SECRET = oldSecret;
   }
+});
+
+
+test("rejects missing JSON content type", async () => {
+  const req = validRequest();
+  delete req.headers["content-type"];
+  const res = await callHandler(req);
+  assert.equal(res.statusCode, 415);
 });
