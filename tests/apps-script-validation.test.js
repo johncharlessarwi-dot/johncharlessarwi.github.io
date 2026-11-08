@@ -14,7 +14,7 @@ function invoke(payload, failConfirmation = false, state = {}) {
       return key === 'ORDER_WEBHOOK_SECRET' ? 'secret-for-test' : (properties.get(key) || '');
     }, setProperty(key, value) { properties.set(key, value); } }) },
     LockService: { getScriptLock: () => ({ tryLock() { return state.lockAvailable !== false; }, releaseLock() { state.released = true; } }) },
-    GmailApp: { sendEmail(...args) { if (failConfirmation && args[0] === payload.email) throw new Error("mailbox unavailable"); sent.push(args); } },
+    GmailApp: { sendEmail(...args) { if (failConfirmation && args[0] === payload.email) throw new Error("mailbox unavailable"); if (state.failTeam && args[0] !== payload.email) throw new Error("team mailbox unavailable"); sent.push(args); } },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput(value) {
       return { value, setMimeType() { return this; } };
     } }
@@ -117,4 +117,18 @@ test("Apps Script refuses delivery when order lock is unavailable", () => {
   const { result, sent } = invoke(base, false, { lockAvailable: false });
   assert.equal(result.ok, false);
   assert.equal(sent.length, 0);
+});
+
+
+test("failed team delivery does not mark the order as processed", () => {
+  const state = { failTeam: true };
+  const first = invoke(base, false, state);
+  assert.equal(first.result.ok, false);
+  assert.equal(first.sent.length, 0);
+  assert.equal(state.properties.has("ORDER_DONE_" + base.orderId), false);
+  assert.equal(state.released, true);
+  state.failTeam = false;
+  const retry = invoke(base, false, state);
+  assert.equal(retry.result.ok, true);
+  assert.equal(retry.sent.length, 2);
 });
