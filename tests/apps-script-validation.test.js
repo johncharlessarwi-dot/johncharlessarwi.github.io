@@ -62,3 +62,12 @@ test("Apps Script refuses oversized webhook payloads without delivering emails",
   assert.equal(result.ok, false);
   assert.equal(sent.length, 0);
 });
+
+
+test("Apps Script rejects subject and name header injection independently", () => {
+  for (const field of ["service", "name"]) {
+    const { result, sent } = invoke({ ...base, [field]: "Website" + String.fromCharCode(13, 10) + "Bcc:intruder@example.com" });
+    assert.equal(result.ok, false, field);
+    assert.equal(sent.length, 0, field);
+  }
+});
