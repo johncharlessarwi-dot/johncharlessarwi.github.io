@@ -128,7 +128,7 @@ $("projects").addEventListener("click",e=>{
  $("case-study-tags").innerHTML=(p.tags||[]).map(t=>"<span>"+safe(t)+"</span>").join("");
  $("case-study-repository").textContent=p.name;
  $("case-study-updated").textContent=p.updated_at?"Repository last updated "+new Date(p.updated_at).toLocaleDateString():"Explore the source repository for implementation details.";
- $("case-study-links").innerHTML=(p.live?'<a class="primary" href="'+safe(p.live)+'" target="_blank" rel="noreferrer">Open live project ↗</a>':"")+(p.url?'<a class="secondary" href="'+safe(p.url)+'" target="_blank" rel="noreferrer">Explore source ↗</a>':"");
+ $("case-study-links").innerHTML=(safeExternalUrl(p.live)?'<a class="primary" href="'+safe(safeExternalUrl(p.live))+'" target="_blank" rel="noreferrer">Open live project ↗</a>':"")+(safeExternalUrl(p.url)?'<a class="secondary" href="'+safe(safeExternalUrl(p.url))+'" target="_blank" rel="noreferrer">Explore source ↗</a>':"");
  caseDialog.showModal();
 });
 $("case-study-close").addEventListener("click",()=>caseDialog.close());
