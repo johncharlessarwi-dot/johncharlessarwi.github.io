@@ -5,13 +5,15 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const code = fs.readFileSync(path.join(__dirname, '../google-apps-script/Code.gs'), 'utf8');
-function invoke(payload, failConfirmation = false) {
+function invoke(payload, failConfirmation = false, state = {}) {
   const sent = [];
+  const properties = state.properties || (state.properties = new Map());
   const context = {
     console: { error() {} },
     PropertiesService: { getScriptProperties: () => ({ getProperty(key) {
-      return key === 'ORDER_WEBHOOK_SECRET' ? 'secret-for-test' : '';
-    } }) },
+      return key === 'ORDER_WEBHOOK_SECRET' ? 'secret-for-test' : (properties.get(key) || '');
+    }, setProperty(key, value) { properties.set(key, value); } }) },
+    LockService: { getScriptLock: () => ({ tryLock() { return state.lockAvailable !== false; }, releaseLock() { state.released = true; } }) },
     GmailApp: { sendEmail(...args) { if (failConfirmation && args[0] === payload.email) throw new Error("mailbox unavailable"); sent.push(args); } },
     ContentService: { MimeType: { JSON: 'json' }, createTextOutput(value) {
       return { value, setMimeType() { return this; } };
