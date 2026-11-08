@@ -17,6 +17,14 @@ module.exports = async function handler(req, res) {
   if (typeof req.body === "string" && Buffer.byteLength(req.body, "utf8") > 16 * 1024) {
     return res.status(413).json({ error: "Enquiry payload is too large." });
   }
+  if (req.body && typeof req.body === "object") {
+    let parsedSize;
+    try { parsedSize = Buffer.byteLength(JSON.stringify(req.body), "utf8"); }
+    catch { return res.status(400).json({ error: "Invalid enquiry data." }); }
+    if (parsedSize > 16 * 1024) {
+      return res.status(413).json({ error: "Enquiry payload is too large." });
+    }
+  }
   const body = typeof req.body === "string" ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })() : (req.body || {});
   if (!body || typeof body !== "object" || Array.isArray(body)) {
     return res.status(400).json({ error: "Invalid enquiry data." });
