@@ -71,3 +71,12 @@ test("Apps Script rejects subject and name header injection independently", () =
     assert.equal(sent.length, 0, field);
   }
 });
+
+
+test("Apps Script enforces independent customer field size limits", () => {
+  for (const patch of [{ email: "a".repeat(160) + "@example.com" }, { message: "x".repeat(4001) }]) {
+    const { result, sent } = invoke({ ...base, ...patch });
+    assert.equal(result.ok, false);
+    assert.equal(sent.length, 0);
+  }
+});
