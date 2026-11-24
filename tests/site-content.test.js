@@ -102,7 +102,8 @@ test("all primary pages expose an accessible, working shared mobile navigation",
 test("tablet navigation collapses before the desktop header becomes crowded", () => {
   const css = read("styles.css");
   assert.ok(css.includes("@media(max-width:680px)"));
-  assert.ok(css.includes("nav.open{display:flex}"));
+  assert.match(css, /nav\.open\{[^}]*display:flex(?:;|\})/);
+  assert.match(css, /nav\.open\{[^}]*overflow-y:auto/);
 });
 
 test("mobile layout keeps the hero visual and form controls usable on narrow screens", () => {
