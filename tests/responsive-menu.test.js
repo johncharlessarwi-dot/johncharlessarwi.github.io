@@ -26,20 +26,24 @@ for (const [width, height] of [[320, 568], [568, 320], [768, 1024], [1440, 900]]
           const box = contact.getBoundingClientRect();
           const x = box.left + box.width / 2;
           const y = box.top + box.height / 2;
-          if (box.width && box.height && contact.contains(document.elementFromPoint(x, y))) {
-            document.body.dataset.contactReachable = "yes";
+          if (innerWidth === ${width} && innerHeight === ${height} && box.width && box.height && contact.contains(document.elementFromPoint(x, y))) {
+            parent.postMessage("contact-reachable", "*");
           }
         });
       </script>`;
       const base = pathToFileURL(root + path.sep).href;
       const fixture = path.join(temp, "page.html");
       fs.writeFileSync(fixture, html.replace(/<head>/i, '<head><base href="' + base + '">').replace("</body>", probe + "</body>"));
+      const frame = path.join(temp, "viewport.html");
+      fs.writeFileSync(frame, `<!doctype html><style>*{margin:0;border:0}</style>
+        <script>onmessage = event => { if (event.source === frames[0] && event.data === "contact-reachable") document.body.dataset.contactReachable = "yes"; };</script>
+        <iframe src="page.html" width="${width}" height="${height}"></iframe>`);
       const result = spawnSync(chrome, [
         "--headless", "--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage",
         "--disable-background-networking", "--host-resolver-rules=MAP * ~NOTFOUND",
         "--allow-file-access-from-files", "--hide-scrollbars", "--force-device-scale-factor=1",
-        "--user-data-dir=" + path.join(temp, "profile"), "--window-size=" + width + "," + height,
-        "--virtual-time-budget=3000", "--dump-dom", pathToFileURL(fixture).href,
+        "--user-data-dir=" + path.join(temp, "profile"), "--window-size=1600,1200",
+        "--virtual-time-budget=3000", "--dump-dom", pathToFileURL(frame).href,
       ], { encoding: "utf8", timeout: 30000, maxBuffer: 8 * 1024 * 1024 });
       assert.equal(result.status, 0, result.error?.message || result.stderr);
       assert.match(result.stdout, /<body[^>]*data-contact-reachable="yes"/);
